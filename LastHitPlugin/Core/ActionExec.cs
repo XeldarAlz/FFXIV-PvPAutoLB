@@ -19,4 +19,6 @@ internal static unsafe class ActionExec
         var am = ActionManager.Instance();
         return am == null ? uint.MaxValue : am->GetActionStatus(ActionType.Action, actionId);
     }
+
+    public static bool IsReady(uint actionId) => actionId != 0 && GetStatus(actionId) == 0;
 }

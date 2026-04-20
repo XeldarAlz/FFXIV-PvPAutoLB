@@ -14,8 +14,6 @@ public class Configuration : IPluginConfiguration
 {
     public int Version { get; set; } = 1;
 
-    public bool IsConfigWindowMovable { get; set; } = true;
-
     public bool Enabled { get; set; } = true;
 
     public ThresholdMode ThresholdMode { get; set; } = ThresholdMode.Percent;
