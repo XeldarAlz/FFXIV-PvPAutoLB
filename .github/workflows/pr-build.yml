@@ -1,4 +1,4 @@
-name: Sample PR Builder for SamplePlugin
+name: PR Builder for LastHitPlugin
 
 on:
   pull_request:
@@ -10,11 +10,13 @@ jobs:
     runs-on: windows-2022
 
     env:
-      Solution_Name: SamplePlugin
+      Solution_Name: LastHitPlugin
 
     steps:
     - name: Checkout
       uses: actions/checkout@v5
+      with:
+        submodules: recursive
 
     - name: Install .NET
       uses: actions/setup-dotnet@v5
@@ -32,8 +34,7 @@ jobs:
     - name: Store artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: SamplePlugin
-        path: .\SamplePlugin\bin\x64\Release\SamplePlugin\*
+        name: LastHitPlugin
+        path: .\LastHitPlugin\bin\x64\Release\LastHitPlugin\*
         if-no-files-found: error
         retention-days: 1
-

@@ -7,7 +7,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Lumina.Excel.Sheets;
 
-namespace SamplePlugin.Windows;
+namespace LastHitPlugin.Windows;
 
 public class MainWindow : Window, IDisposable
 {

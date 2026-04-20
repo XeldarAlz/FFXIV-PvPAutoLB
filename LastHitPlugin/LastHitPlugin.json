@@ -1,0 +1,12 @@
+{
+  "Author": "XeldarAlz",
+  "Name": "LastHit",
+  "Punchline": "Auto-fires your PvP Limit Break when an enemy is about to die.",
+  "Description": "PvP-only plugin. Watches enemy HP in PvP and fires your job's PvP Limit Break when HP drops below a configurable, per-job threshold. Optionally auto-selects the lowest-HP hostile in range. Use /lasthit to open.",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "pvp",
+    "limit break",
+    "combat"
+  ]
+}
