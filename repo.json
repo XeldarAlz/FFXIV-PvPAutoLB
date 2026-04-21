@@ -1,29 +1,31 @@
-{
-  "Author": "XeldarAlz",
-  "Name": "LastHit",
-  "InternalName": "LastHitPlugin",
-  "AssemblyVersion": "0.0.0.1",
-  "TestingAssemblyVersion": "0.0.0.1",
-  "Description": "Fires your job's PvP Limit Break when the target's HP drops below a configurable threshold. Threshold is set as a percent of max HP or an absolute HP value. Optionally auto-selects the lowest-HP hostile in range when no manual target is set. Commands: /lasthit, /lasthit config.",
-  "Punchline": "Fires your PvP Limit Break at a configurable HP threshold to last hit enemies.",
-  "RepoUrl": "https://github.com/XeldarAlz/FFXIV-LastHit",
-  "ApplicableVersion": "any",
-  "Tags": [
-    "pvp",
-    "limit break",
-    "combat",
-    "automation"
-  ],
-  "CategoryTags": [
-    "pvp"
-  ],
-  "DalamudApiLevel": 14,
-  "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-LastHit/master/LastHitPlugin/images/icon.png",
-  "DownloadLinkInstall": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
-  "DownloadLinkUpdate": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
-  "DownloadLinkTesting": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
-  "IsTestingExclusive": false,
-  "AcceptsFeedback": true,
-  "DownloadCount": 0,
-  "LastUpdate": "1776797647"
-}
+[
+  {
+    "Author": "XeldarAlz",
+    "Name": "LastHit",
+    "InternalName": "LastHitPlugin",
+    "AssemblyVersion": "0.0.0.1",
+    "TestingAssemblyVersion": "0.0.0.1",
+    "Description": "Fires your job's PvP Limit Break when the target's HP drops below a configurable threshold. Threshold is set as a percent of max HP or an absolute HP value. Optionally auto-selects the lowest-HP hostile in range when no manual target is set. Commands: /lasthit, /lasthit config.",
+    "Punchline": "Fires your PvP Limit Break at a configurable HP threshold to last hit enemies.",
+    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-LastHit",
+    "ApplicableVersion": "any",
+    "Tags": [
+      "pvp",
+      "limit break",
+      "combat",
+      "automation"
+    ],
+    "CategoryTags": [
+      "pvp"
+    ],
+    "DalamudApiLevel": 14,
+    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-LastHit/master/LastHitPlugin/images/icon.png",
+    "DownloadLinkInstall": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
+    "DownloadLinkTesting": "https://github.com/XeldarAlz/FFXIV-LastHit/releases/latest/download/latest.zip",
+    "IsTestingExclusive": false,
+    "AcceptsFeedback": true,
+    "DownloadCount": 0,
+    "LastUpdate": "1776797647"
+  }
+]
