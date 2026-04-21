@@ -12,8 +12,9 @@ internal sealed class DefaultPvpLimitBreakModule : IJobLimitBreakModule
 {
     private const uint LimitBreakCategoryId = 15;
     private const uint UnsetRowId = uint.MaxValue;
+    private static readonly uint[] Empty = System.Array.Empty<uint>();
 
-    private readonly Dictionary<uint, uint> cache;
+    private readonly Dictionary<uint, uint[]> cache;
 
     public DefaultPvpLimitBreakModule()
     {
@@ -22,32 +23,64 @@ internal sealed class DefaultPvpLimitBreakModule : IJobLimitBreakModule
         if (cache.Count == 0) DumpDiagnostics();
     }
 
-    public bool TryResolve(uint classJobId, out uint actionId)
-        => cache.TryGetValue(classJobId, out actionId);
+    public IReadOnlyList<uint> Resolve(uint classJobId)
+        => cache.TryGetValue(classJobId, out var ids) ? ids : Empty;
 
-    private static Dictionary<uint, uint> BuildCache()
+    private static Dictionary<uint, uint[]> BuildCache()
     {
         var sheet = Svc.Data.GetExcelSheet<LuminaAction>();
-        if (sheet == null) return new Dictionary<uint, uint>();
+        if (sheet == null) return new Dictionary<uint, uint[]>();
 
-        return sheet
+        var primaries = sheet
             .Where(a => a.IsPvP)
             .Where(a => a.ActionCategory.RowId == LimitBreakCategoryId)
             .Where(a => a.ClassJob.RowId != 0 && a.ClassJob.RowId != UnsetRowId)
             .GroupBy(a => a.ClassJob.RowId)
-            .ToDictionary(g => g.Key, g => g.First().RowId);
+            .ToDictionary(g => g.Key, g => g.Select(a => a.RowId).ToList());
+
+        var followUpsByParent = sheet
+            .Where(a => a.IsPvP && a.ActionCombo.RowId != 0)
+            .GroupBy(a => a.ActionCombo.RowId)
+            .ToDictionary(g => g.Key, g => g.Select(a => a.RowId).ToArray());
+
+        var result = new Dictionary<uint, uint[]>();
+        foreach (var kv in primaries)
+        {
+            var ordered = new List<uint>(kv.Value);
+            var seen = new HashSet<uint>(kv.Value);
+            var queue = new Queue<uint>(kv.Value);
+            while (queue.Count > 0)
+            {
+                var parent = queue.Dequeue();
+                if (!followUpsByParent.TryGetValue(parent, out var followUps)) continue;
+                foreach (var id in followUps)
+                {
+                    if (seen.Add(id))
+                    {
+                        ordered.Add(id);
+                        queue.Enqueue(id);
+                    }
+                }
+            }
+            result[kv.Key] = ordered.ToArray();
+        }
+        return result;
     }
 
     private void LogResolvedMap()
     {
-        Svc.Log.Info($"[LastHit] Resolved {cache.Count} PvP Limit Breaks");
+        Svc.Log.Info($"[LastHit] Resolved PvP Limit Breaks for {cache.Count} jobs");
         var jobs = Svc.Data.GetExcelSheet<LuminaClassJob>();
         var actions = Svc.Data.GetExcelSheet<LuminaAction>();
         foreach (var kv in cache.OrderBy(k => k.Key))
         {
             var jobName = jobs?.GetRowOrDefault(kv.Key)?.Abbreviation.ToString() ?? $"Job{kv.Key}";
-            var actionName = actions?.GetRowOrDefault(kv.Value)?.Name.ToString() ?? $"Action{kv.Value}";
-            Svc.Log.Debug($"[LastHit]   Job {kv.Key} ({jobName}) -> Action {kv.Value} ({actionName})");
+            var parts = string.Join(", ", kv.Value.Select(id =>
+            {
+                var n = actions?.GetRowOrDefault(id)?.Name.ToString() ?? $"Action{id}";
+                return $"{id} ({n})";
+            }));
+            Svc.Log.Debug($"[LastHit]   Job {kv.Key} ({jobName}) -> [{parts}]");
         }
     }
 

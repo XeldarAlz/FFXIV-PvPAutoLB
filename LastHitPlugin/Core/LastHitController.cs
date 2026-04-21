@@ -37,12 +37,19 @@ internal sealed class LastHitController : IDisposable
 
         if (!IsBelowThreshold(target)) return;
 
-        var actionId = JobModuleRegistry.ResolveActionId(Player.Object!.ClassJob.RowId);
-        if (actionId == 0) return;
+        var actionIds = JobModuleRegistry.ResolveActionIds(Player.Object!.ClassJob.RowId);
+        if (actionIds.Count == 0) return;
 
-        if (!EzThrottler.Throttle("LastHit.Fire", 1500)) return;
-        if (ActionExec.TryUse(actionId))
-            LastFiredUtc = DateTime.UtcNow;
+        foreach (var actionId in actionIds)
+        {
+            if (!ActionExec.IsReady(actionId)) continue;
+            if (!EzThrottler.Throttle($"LastHit.Fire.{actionId}", 500)) continue;
+            if (ActionExec.TryUse(actionId))
+            {
+                LastFiredUtc = DateTime.UtcNow;
+                return;
+            }
+        }
     }
 
     private bool IsBelowThreshold(IBattleChara target)

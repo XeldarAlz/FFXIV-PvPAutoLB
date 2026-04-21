@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace LastHitPlugin.Core;
@@ -10,11 +11,19 @@ internal static class JobModuleRegistry
 
     public static void Clear() => Modules.Clear();
 
-    public static uint ResolveActionId(uint classJobId)
+    public static IReadOnlyList<uint> ResolveActionIds(uint classJobId)
     {
         foreach (var m in Modules)
-            if (m.TryResolve(classJobId, out var id) && id != 0)
-                return id;
-        return 0;
+        {
+            var list = m.Resolve(classJobId);
+            if (list.Count > 0) return list;
+        }
+        return Array.Empty<uint>();
+    }
+
+    public static uint ResolveActionId(uint classJobId)
+    {
+        var list = ResolveActionIds(classJobId);
+        return list.Count > 0 ? list[0] : 0u;
     }
 }
