@@ -4,10 +4,6 @@
 
 <h1 align="center">LastHit (WORK IN PROGRESS)</h1>
 
-<p align="center">
-  Fires your PvP Limit Break at a configurable HP threshold.
-</p>
-
 ---
 
 ## What it does
