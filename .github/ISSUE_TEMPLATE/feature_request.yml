@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest an idea or improvement.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: The situation or friction that made you want this. Skip the solution — just the problem.
+      placeholder: "I want the LB to hold off a second when the target already has a DoT ticking..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What did you have in mind?
+      description: Rough sketch is fine. Bullet points or prose.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Other ways to solve the same problem, and why they're worse.
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?

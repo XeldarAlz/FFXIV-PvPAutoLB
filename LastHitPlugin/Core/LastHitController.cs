@@ -30,7 +30,7 @@ internal sealed class LastHitController : IDisposable
     {
         if (!config.Enabled) { LastResolvedTarget = null; return; }
         if (!Player.Available) { LastResolvedTarget = null; return; }
-        if (!EzThrottler.Throttle("LastHit.Tick", 100)) return;
+        if (!EzThrottler.Throttle("LastHit.Tick", 33)) return;
 
         var target = ResolveTarget();
         LastResolvedTarget = target;
@@ -73,9 +73,10 @@ internal sealed class LastHitController : IDisposable
 
     private IBattleChara? ResolveTarget()
     {
+        if (config.AutoSelectLowestHp)
+            return TargetSelector.PickLowestHp(config.AutoSelectRangeYalms);
         if (Svc.Targets.Target is IBattleChara manual && !manual.IsDead)
             return manual;
-        if (!config.AutoSelectLowestHp) return null;
-        return TargetSelector.PickLowestHp(config.AutoSelectRangeYalms);
+        return null;
     }
 }
