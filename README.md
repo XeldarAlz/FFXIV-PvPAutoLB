@@ -22,18 +22,6 @@ Monitors enemy HP during PvP. When the target's HP drops below the configured th
 - Status window: current target, HP / max HP / percent, threshold state, time since last fire.
 - Respects the game's action availability and animation lock.
 
-## Screenshots
-
-<p align="center">
-  <img src="LastHitPlugin/images/window.png" alt="Status window" />
-  <br /><em>Status window</em>
-</p>
-
-<p align="center">
-  <img src="LastHitPlugin/images/settings.png" alt="Settings" />
-  <br /><em>Settings</em>
-</p>
-
 ## Install
 
 1. `/xlsettings` → **Experimental** → add the full path to `LastHitPlugin.dll` under **Dev Plugin Locations**.
