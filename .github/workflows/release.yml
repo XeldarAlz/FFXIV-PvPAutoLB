@@ -63,12 +63,12 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release
 
-      - name: Package latest.zip
+      - name: Stage latest.zip
         shell: pwsh
         run: |
-          $out = 'LastHitPlugin/bin/x64/Release/LastHitPlugin'
-          if (-not (Test-Path $out)) { throw "Build output not found at $out" }
-          Compress-Archive -Path "$out/*" -DestinationPath 'latest.zip' -Force
+          $src = 'LastHitPlugin/bin/x64/Release/LastHitPlugin/latest.zip'
+          if (-not (Test-Path $src)) { throw "SDK-built plugin zip not found at $src" }
+          Copy-Item $src 'latest.zip' -Force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
