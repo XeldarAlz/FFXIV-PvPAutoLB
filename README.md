@@ -71,8 +71,8 @@ PvP Limit Breaks are resolved dynamically from game data, so every job is wired 
 | Job | Status | Notes |
 |---|---|---|
 | Monk | ❔ | Not tested yet |
-| Dragoon | ✅ | Confirmed working; multi-phase LB (High Jump → Sky Shatter) |
-| Ninja | ✅ | Confirmed working |
+| Dragoon | ✅ | Confirmed working in CC |
+| Ninja | ✅ | Confirmed working in CC |
 | Samurai | ❔ | Not tested yet |
 | Reaper | ❔ | Not tested yet |
 | Viper | ❔ | Not tested yet |
