@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dalamud.Game.ClientState.Objects.Enums;
-using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 
 namespace LastHitPlugin.Core;
@@ -23,7 +22,7 @@ internal static class TargetSelector
             .OfType<IBattleChara>()
             .Where(o => o.GameObjectId != meId)
             .Where(o => !o.IsDead && o.IsTargetable)
-            .Where(IsEnemy)
+            .Where(o => o.IsHostile())
             .Where(o =>
             {
                 var dx = o.Position.X - mePos.X;
@@ -32,15 +31,6 @@ internal static class TargetSelector
             })
             .OrderBy(o => o.CurrentHp)
             .ToList();
-    }
-
-    private static bool IsEnemy(IBattleChara o)
-    {
-        if (o is IPlayerCharacter)
-            return o.StatusFlags.HasFlag(StatusFlags.Hostile);
-        if (o is IBattleNpc npc)
-            return npc.BattleNpcKind == BattleNpcSubKind.Enemy;
-        return false;
     }
 
     public static IBattleChara? PickLowestHp(float rangeYalms)
