@@ -3,8 +3,8 @@
     "Author": "XeldarAlz",
     "Name": "LastHit",
     "InternalName": "LastHitPlugin",
-    "AssemblyVersion": "0.0.0.3",
-    "TestingAssemblyVersion": "0.0.0.3",
+    "AssemblyVersion": "0.0.0.4",
+    "TestingAssemblyVersion": "0.0.0.4",
     "Description": "Fires your job's PvP Limit Break when the target's HP drops below a configurable threshold. Threshold is set as a percent of max HP or an absolute HP value. Optionally auto-selects the lowest-HP hostile in range when no manual target is set. Commands: /lasthit, /lasthit config.",
     "Punchline": "Fires your PvP Limit Break at a configurable HP threshold to last hit enemies.",
     "RepoUrl": "https://github.com/XeldarAlz/FFXIV-LastHit",
@@ -26,6 +26,6 @@
     "IsTestingExclusive": false,
     "AcceptsFeedback": true,
     "DownloadCount": 14,
-    "LastUpdate": "1776799618"
+    "LastUpdate": "1776973480"
   }
 ]
