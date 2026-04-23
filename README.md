@@ -81,7 +81,7 @@ PvP Limit Breaks are resolved dynamically from game data, so every job is wired 
 | Job | Status | Notes |
 |---|---|---|
 | Bard | ❔ | Not tested yet |
-| Machinist | ❔ | Not tested yet |
+| Machinist | ✅ | Confirmed working in CC |
 | Dancer | ❔ | Not tested yet |
 
 ### Magical Ranged DPS
