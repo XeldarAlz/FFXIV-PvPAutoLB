@@ -97,9 +97,20 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add repo.json LastHitPlugin/LastHitPlugin.csproj
-          if (git status --porcelain) {
-            git commit -m "Release ${{ steps.ver.outputs.TAG }}: bump repo.json"
-            git push origin HEAD:master
-          } else {
+          if (-not (git status --porcelain)) {
             Write-Host 'No changes to commit.'
+            exit 0
           }
+          git commit -m "Release ${{ steps.ver.outputs.TAG }}: bump repo.json"
+          # Rebase onto latest master to avoid push rejection if a concurrent
+          # workflow (e.g. DownloadCount bump) advanced master during the build.
+          for ($i = 1; $i -le 5; $i++) {
+            git fetch origin master
+            git rebase origin/master
+            git push origin HEAD:master
+            if ($LASTEXITCODE -eq 0) { exit 0 }
+            Write-Host "Push rejected (attempt $i); retrying after rebase..."
+            Start-Sleep -Seconds 2
+          }
+          Write-Error 'Failed to push repo.json bump after 5 attempts.'
+          exit 1
