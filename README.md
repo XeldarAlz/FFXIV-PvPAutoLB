@@ -2,7 +2,7 @@
   <img src="LastHitPlugin/images/icon.png" width="220" alt="LastHit icon" />
 </p>
 
-<h1 align="center">LastHit (WORK IN PROGRESS)</h1>
+<h1 align="center">LastHit</h1>
 
 ---
 
