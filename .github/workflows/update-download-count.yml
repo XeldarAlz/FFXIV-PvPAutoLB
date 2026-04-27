@@ -1,8 +1,11 @@
+# DownloadCount in repo.json is normally bumped by the release workflow once per
+# tagged release. This workflow exists for ad-hoc refreshes between releases —
+# trigger it from the Actions tab when you want repo.json to catch up to live
+# numbers without cutting a new release.
+
 name: Update Download Count
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   workflow_dispatch:
 
 permissions:

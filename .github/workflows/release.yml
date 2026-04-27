@@ -79,6 +79,17 @@ jobs:
           generate_release_notes: true
           fail_on_unmatched_files: true
 
+      - name: Fetch download count
+        id: count
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          total=$(gh api "repos/${{ github.repository }}/releases" --paginate \
+            --jq '[.[].assets[].download_count] | add // 0')
+          echo "total=$total" >> "$GITHUB_OUTPUT"
+          echo "Total downloads across all releases: $total"
+
       - name: Update repo.json
         shell: pwsh
         run: |
@@ -87,6 +98,7 @@ jobs:
           $json = Get-Content -Raw -Path $path | ConvertFrom-Json
           $json[0].AssemblyVersion = $v
           $json[0].TestingAssemblyVersion = $v
+          $json[0].DownloadCount = [int]'${{ steps.count.outputs.total }}'
           $json[0] | Add-Member -NotePropertyName 'LastUpdate' -NotePropertyValue ([string][int][double]::Parse((Get-Date -UFormat %s))) -Force
           # -AsArray preserves the array wrapper; piping a single-element array through | unrolls it and loses the [ ... ] Dalamud requires.
           ConvertTo-Json -InputObject $json -Depth 10 -AsArray | Set-Content -Path $path -Encoding utf8
