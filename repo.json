@@ -3,8 +3,8 @@
     "Author": "XeldarAlz",
     "Name": "PVP Auto LB",
     "InternalName": "PvpAutoLb",
-    "AssemblyVersion": "1.0.0.0",
-    "TestingAssemblyVersion": "1.0.0.0",
+    "AssemblyVersion": "1.0.1.0",
+    "TestingAssemblyVersion": "1.0.1.0",
     "Description": "Fires your job's PvP Limit Break when an enemy's HP drops below a configurable threshold (percent of max HP, or absolute value). Optionally auto-selects the lowest-HP hostile in range when no manual target is set. Defensive/support LBs (e.g. Phalanx, Primal Scream) are recognized and skipped. Commands: /pvpautolb, /pvpautolb config, /palb.",
     "Punchline": "Auto-fires your PvP Limit Break at low-HP enemies.",
     "RepoUrl": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB",
@@ -18,7 +18,7 @@
     "CategoryTags": [
       "pvp"
     ],
-    "DalamudApiLevel": 14,
+    "DalamudApiLevel": 15,
     "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/PvpAutoLb/Images/IconDalamud.png",
     "DownloadLinkInstall": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/releases/latest/download/latest.zip",
     "DownloadLinkUpdate": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/releases/latest/download/latest.zip",
@@ -26,6 +26,6 @@
     "IsTestingExclusive": false,
     "AcceptsFeedback": true,
     "DownloadCount": 33,
-    "LastUpdate": "1777301400"
+    "LastUpdate": "1777527017"
   }
 ]

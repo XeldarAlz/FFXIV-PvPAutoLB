@@ -7,7 +7,7 @@ namespace PvpAutoLb.Windows.Components;
 
 internal static class Card
 {
-    public static IDisposable Begin(string id, float height, Vector4 background, Vector4 border, float borderSize = 1f)
+    public static CardScope Begin(string id, float height, Vector4 background, Vector4 border, float borderSize = 1f)
     {
         var style = Styling.PushCardStyle();
         var bg = ImRaii.PushColor(ImGuiCol.ChildBg, background);
@@ -15,16 +15,33 @@ internal static class Card
         var sz = ImRaii.PushStyle(ImGuiStyleVar.ChildBorderSize, borderSize);
         var child = ImRaii.Child(id, new Vector2(-1, height), true,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
-        return new CompositeDisposable(child, sz, br, bg, style);
+        return new CardScope(child, sz, br, bg, style);
     }
 
-    private sealed class CompositeDisposable : IDisposable
+    public ref struct CardScope
     {
-        private readonly IDisposable[] disposables;
-        public CompositeDisposable(params IDisposable[] disposables) => this.disposables = disposables;
+        private ImRaii.ChildDisposable child;
+        private readonly IDisposable sz;
+        private readonly IDisposable br;
+        private readonly IDisposable bg;
+        private readonly IDisposable style;
+
+        internal CardScope(ImRaii.ChildDisposable child, IDisposable sz, IDisposable br, IDisposable bg, IDisposable style)
+        {
+            this.child = child;
+            this.sz = sz;
+            this.br = br;
+            this.bg = bg;
+            this.style = style;
+        }
+
         public void Dispose()
         {
-            for (var i = 0; i < disposables.Length; i++) disposables[i]?.Dispose();
+            child.Dispose();
+            sz?.Dispose();
+            br?.Dispose();
+            bg?.Dispose();
+            style?.Dispose();
         }
     }
 }

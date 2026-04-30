@@ -2,6 +2,16 @@
 
 All notable changes to PVP Auto LB are documented here.
 
+## v1.0.1.0
+
+Compatibility release for Patch 7.50 / Dalamud API 15. No behavior changes.
+
+### Changed
+- **Dalamud API 15.** Bumped `Dalamud.NET.Sdk` to `15.0.0` and `DalamudApiLevel` to 15. ECommons submodule advanced to NightmareXIV/ECommons master at the API15 update commit.
+
+### Fixed
+- **Card child-region disposal.** `ImRaii.Child(...)` in API 15 now returns a `ChildDisposable` ref struct instead of `IDisposable`, which broke `Card.Begin`. Replaced the heap-allocated `CompositeDisposable` in `Card.cs` with a `CardScope` ref struct that holds the child handle directly and disposes it before the surrounding style/color pushes (preserving the original LIFO order so ImGui state unwinds correctly).
+
 ## v1.0.0.0
 
 First stable release. Builds on v0.1.0.0 with five user-facing features and a full architecture refactor.
