@@ -9,8 +9,9 @@ internal static unsafe class ActionExec
         if (actionId == 0) return false;
         var am = ActionManager.Instance();
         if (am == null) return false;
-        if (am->AnimationLock > 0f) return false;
-        if (am->GetActionStatus(ActionType.Action, actionId, targetId) != 0) return false;
+        // Submit even while anim-lock or weapon GCD is active. ActionManager's
+        // queue window flushes our LB the instant locks clear, so we beat any
+        // late-arriving submissions from other rotation plugins to the slot.
         return am->UseAction(ActionType.Action, actionId, targetId);
     }
 

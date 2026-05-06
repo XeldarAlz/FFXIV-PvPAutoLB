@@ -2,6 +2,14 @@
 
 All notable changes to PVP Auto LB are documented here.
 
+## v1.0.2.0
+
+Behavior fix: the LB now wins the action-queue race against other rotation plugins, so it fires the instant HP drops below the threshold instead of waiting one or more GCD cycles.
+
+### Fixed
+- **Engine-level action queueing.** `ActionExec.TryUse` previously short-circuited on `AnimationLock > 0f` and a redundant `GetActionStatus` check, so we never submitted to `ActionManager.UseAction` during the queue window. That let competing rotation plugins (e.g. Rotation Solver) land in the queue slot first; our LB only fired on the rare tick where both anim-lock and GCD were already clear. We now submit every tick HP is below threshold and let the engine queue the LB — last writer wins the slot, and at 30 Hz that is us. Multi-phase LB selection (Dragoon High Jump → Sky Shatter, etc.) is unchanged: `IsReady` still picks the correct action ID before submission.
+- **Faster recovery from fizzled queues.** `FireThrottleMs` lowered from 500 ms → 250 ms so a queued LB that fizzles at flush (target died or moved out of range during the queue window) retargets on the next tick instead of after half a second.
+
 ## v1.0.1.0
 
 Compatibility release for Patch 7.50 / Dalamud API 15. No behavior changes.
