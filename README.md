@@ -108,8 +108,8 @@ PvP Limit Breaks are resolved dynamically from game data, so every job is wired 
 ### Tanks
 | Job | Status | Notes |
 |---|---|---|
-| Paladin | 🛡 | Phalanx — defensive (party barrier + Stoneskin) |
-| Warrior | 🛡 | Primal Scream — defensive |
+| Paladin | 🛡 | Phalanx — Defensive |
+| Warrior | 🛡 | Primal Scream — Defensive |
 | Dark Knight | ✅ | Confirmed working in CC |
 | Gunbreaker | ✅ | Confirmed working in CC |
 
@@ -117,9 +117,9 @@ PvP Limit Breaks are resolved dynamically from game data, so every job is wired 
 | Job | Status | Notes |
 |---|---|---|
 | White Mage | ✅ | Confirmed working in CC |
-| Scholar | ❔ | Not tested yet |
-| Astrologian | 🛡 | Celestial River — support |
-| Sage | 🛡 | Mesotes — support |
+| Scholar | 🛡 | Seraphism — Support |
+| Astrologian | 🛡 | Celestial River — Support |
+| Sage | 🛡 | Mesotes — Support |
 
 ### Melee DPS
 | Job | Status | Notes |
@@ -128,23 +128,23 @@ PvP Limit Breaks are resolved dynamically from game data, so every job is wired 
 | Dragoon | ✅ | Confirmed working in CC |
 | Ninja | ✅ | Confirmed working in CC |
 | Samurai | ✅ | Confirmed working in CC |
-| Reaper | 🛡 | Tenebrae Lemurum — support |
+| Reaper | 🛡 | Tenebrae Lemurum — Support |
 | Viper | ✅ | Confirmed working in CC |
 
 ### Physical Ranged DPS
 | Job | Status | Notes |
 |---|---|---|
-| Bard | 🛡 | Final Fantasia — support |
+| Bard | 🛡 | Final Fantasia — Support |
 | Machinist | ✅ | Confirmed working in CC |
-| Dancer | 🛡 | Contradance — support |
+| Dancer | 🛡 | Contradance — Support |
 
 ### Magical Ranged DPS
 | Job | Status | Notes |
 |---|---|---|
-| Black Mage | 🛡 | Soul Resonance — support |
-| Summoner | ❔ | Not tested yet |
-| Red Mage | ❔ | Not tested yet |
-| Pictomancer | 🛡 | Advent of Chocobastion — defensive |
+| Black Mage | 🛡 | Soul Resonance — Support |
+| Summoner | 🛡 | Summon Phoenix & Bahamut - Support |
+| Red Mage | ✅ | Southern Cross - Confirmed working in CC |
+| Pictomancer | 🛡 | Advent of Chocobastion — Defensive |
 
 ## License
 
