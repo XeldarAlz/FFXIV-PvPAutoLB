@@ -38,6 +38,7 @@ public class Configuration : IPluginConfiguration
     public Dictionary<uint, JobThreshold> PerJobThresholds { get; set; } = new();
 
     public bool SkipDoomedTargets { get; set; } = true;
+    public bool SkipGuardedTargets { get; set; } = true;
 
     public bool PlaySoundOnFire { get; set; } = false;
     public int FireSoundId { get; set; } = 7;

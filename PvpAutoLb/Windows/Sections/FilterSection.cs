@@ -15,6 +15,7 @@ internal static class FilterSection
         using (Card.Begin("##filters", Layout.FilterCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
             DrawSkipDoomed(cfg);
+            DrawSkipGuarded(cfg);
             ImGui.Spacing();
             DrawDutyMask(cfg);
         }
@@ -29,6 +30,17 @@ internal static class FilterSection
             cfg.Save();
         }
         Tooltip.OnHover("Estimates each enemy's HP-per-second loss; skips them if predicted death is sooner than ~1.2s (typical LB animation lock).");
+    }
+
+    private static void DrawSkipGuarded(Configuration cfg)
+    {
+        var skip = cfg.SkipGuardedTargets;
+        if (ImGui.Checkbox("Skip targets using Guard", ref skip))
+        {
+            cfg.SkipGuardedTargets = skip;
+            cfg.Save();
+        }
+        Tooltip.OnHover("Targets with the PvP Guard status (90% damage reduction, 5s) are skipped — the LB would land for ~10% damage and waste the charge.");
     }
 
     private static void DrawDutyMask(Configuration cfg)

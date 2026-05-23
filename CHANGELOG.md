@@ -2,6 +2,13 @@
 
 All notable changes to PVP Auto LB are documented here.
 
+## v1.0.4.0
+
+Behavior fix: the LB no longer auto-fires on targets using PvP Guard.
+
+### Fixed
+- **Skip Guarded targets.** When an enemy is using the PvP Guard action (`#29053`, status `1302`), their incoming damage is reduced by 90% for 5 seconds. The plugin previously treated them as a normal below-threshold pick and burned the LB on them for ~10% effect. We now scan the target's `StatusList` for the Guard status and skip them in both the auto-select path (`FireDecisionMaker.Decide` → `FilterGuarded`) and the manual-target path (`AutoLbController.TickManualTarget`). New `Skip targets using Guard` toggle in **Settings → Filters**, default on.
+
 ## v1.0.3.0
 
 Internal refactor + ecosystem-aligned tooling. No behavior changes — every feature, threshold, hotkey, and on-screen state is identical to v1.0.2.0.

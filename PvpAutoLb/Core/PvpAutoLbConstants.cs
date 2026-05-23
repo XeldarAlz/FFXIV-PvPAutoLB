@@ -36,4 +36,12 @@ internal static class PvpAutoLbConstants
         public const string Save = "PvpAutoLb.ConfigSave";
         public const string FirePrefix = "PvpAutoLb.Fire.";
     }
+
+    public static class StatusIds
+    {
+        // PvP Guard (applied by action 29053). 5s duration, 90% damage reduction —
+        // any LB cast on a Guarded target lands for ~10% of its normal value,
+        // which is almost always a wasted LB charge.
+        public const uint Guard = 1302;
+    }
 }

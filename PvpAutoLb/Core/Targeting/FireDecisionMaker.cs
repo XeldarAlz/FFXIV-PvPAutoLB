@@ -20,6 +20,9 @@ internal static class FireDecisionMaker
         if (cfg.SkipDoomedTargets) below = FilterDoomed(below, tracker);
         if (below.Count == 0) return null;
 
+        if (cfg.SkipGuardedTargets) below = FilterGuarded(below);
+        if (below.Count == 0) return null;
+
         return profile.Shape switch
         {
             LbCastShape.CircleAroundCaster
@@ -120,6 +123,17 @@ internal static class FireDecisionMaker
         {
             var ttd = tracker.PredictTimeToDeath(below[i]);
             if (ttd is { } t && t.TotalMilliseconds < PvpAutoLbConstants.DoomedTtdMs) continue;
+            result.Add(below[i]);
+        }
+        return result;
+    }
+
+    private static List<IBattleChara> FilterGuarded(List<IBattleChara> below)
+    {
+        var result = new List<IBattleChara>(below.Count);
+        for (var i = 0; i < below.Count; i++)
+        {
+            if (StatusFilter.IsGuarded(below[i])) continue;
             result.Add(below[i]);
         }
         return result;

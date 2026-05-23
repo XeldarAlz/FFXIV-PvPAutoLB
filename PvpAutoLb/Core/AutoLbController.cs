@@ -98,6 +98,7 @@ internal sealed class AutoLbController : IDisposable
             LastEnemiesAffected = 0;
             return;
         }
+        if (cfg.SkipGuardedTargets && StatusFilter.IsGuarded(manual)) { LastEnemiesAffected = 0; return; }
         if (BlocklistFilter.IsBlocked(manual, cfg.NameBlocklist)) { LastEnemiesAffected = 0; return; }
         LastEnemiesAffected = 1;
         Fire(jobId, manual);
