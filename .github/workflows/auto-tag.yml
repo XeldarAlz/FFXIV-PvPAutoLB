@@ -1,0 +1,74 @@
+name: Auto-tag on version bump
+
+# Whenever master moves, read the plugin version from Directory.Build.props.
+# If that version has no matching v* tag yet, create one and push it — the
+# existing release.yml fires from the tag push and publishes latest.zip.
+#
+# Bump <Version> in Directory.Build.props before (or inside) your PR and
+# you get a release automatically once it merges. Commit without a version
+# bump and nothing happens. CI also asserts repo.json's AssemblyVersion /
+# TestingAssemblyVersion match this value.
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: auto-tag-master
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    if: "!contains(toJson(github.event.commits.*.message), '[skip auto-tag]')"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Read plugin version from Directory.Build.props
+        id: version
+        run: |
+          version=$(grep -oP '<Version>\K[\d.]+(?=</Version>)' Directory.Build.props)
+          if [ -z "$version" ]; then
+            echo "::error::Could not parse <Version> from Directory.Build.props"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "Plugin version: $version"
+
+      - name: Check whether tag already exists
+        id: check
+        run: |
+          tag="${{ steps.version.outputs.tag }}"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag $tag already exists — nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Tag $tag does not exist yet — will create."
+          fi
+
+      - name: Create and push tag
+        if: steps.check.outputs.exists == 'false'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          if git push origin "$TAG"; then
+            echo "Pushed tag $TAG."
+          elif git ls-remote --tags origin "refs/tags/$TAG" | awk '{print $2}' | grep -qx "refs/tags/$TAG"; then
+            echo "Tag $TAG was created by another run — nothing to do."
+          else
+            echo "::error::Failed to push tag $TAG"
+            exit 1
+          fi

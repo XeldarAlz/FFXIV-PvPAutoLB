@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+
+  # Cheap gates that don't need the SDK or Dalamud — run them first so a
+  # version-sync mistake fails fast without burning the full build.
+  guards:
+    name: Guards (version sync)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Verify version sync (Directory.Build.props ↔ repo.json)
+        shell: bash
+        run: |
+          build_ver=$(grep -oP '<Version>\K[\d.]+(?=</Version>)' Directory.Build.props)
+          assembly_ver=$(jq -r '.[0].AssemblyVersion' repo.json)
+          testing_ver=$(jq -r '.[0].TestingAssemblyVersion' repo.json)
+          echo "Directory.Build.props <Version>      = $build_ver"
+          echo "repo.json AssemblyVersion           = $assembly_ver"
+          echo "repo.json TestingAssemblyVersion    = $testing_ver"
+          if [ "$build_ver" != "$assembly_ver" ] || [ "$build_ver" != "$testing_ver" ]; then
+            echo "::error::Version mismatch — Directory.Build.props ($build_ver), repo.json AssemblyVersion ($assembly_ver), TestingAssemblyVersion ($testing_ver) must all match."
+            exit 1
+          fi
+
+  # Full build. Needs Dalamud present at the standard plugin path so
+  # Dalamud.NET.Sdk can resolve $(DalamudLibPath).
+  build:
+    name: Build (Windows)
+    needs: guards
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download Dalamud dev build
+        shell: pwsh
+        # Track staging while API 15 / Patch 7.50 is in beta — the release
+        # channel is still API 14 and won't satisfy Dalamud.NET.Sdk 15.x.
+        # Revert to /latest.zip once Dalamud 15 GAs.
+        run: |
+          $dalamudUrl = "https://goatcorp.github.io/dalamud-distrib/stg/latest.zip"
+          $dalamudDir = "$env:AppData\XIVLauncher\addon\Hooks\dev"
+          New-Item -ItemType Directory -Force -Path $dalamudDir | Out-Null
+          Invoke-WebRequest -Uri $dalamudUrl -OutFile dalamud.zip
+          Expand-Archive -Path dalamud.zip -DestinationPath $dalamudDir -Force
+          Remove-Item dalamud.zip
+
+      - name: Restore
+        run: dotnet restore PvpAutoLb.sln
+
+      - name: Build (Release)
+        run: dotnet build PvpAutoLb.sln --configuration Release --no-restore
+
+      - name: Find test projects
+        id: find_tests
+        shell: bash
+        run: |
+          if find . -name "*.Tests.csproj" -o -name "*.Test.csproj" 2>/dev/null | grep -q .; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run tests
+        if: steps.find_tests.outputs.found == 'true'
+        run: dotnet test PvpAutoLb.sln --configuration Release --no-build --logger "console;verbosity=normal"
+
+      - name: Upload plugin artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PvpAutoLb-plugin
+          path: PvpAutoLb/bin/x64/Release/PvpAutoLb/latest.zip
+          if-no-files-found: warn

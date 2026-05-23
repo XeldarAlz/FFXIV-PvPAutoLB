@@ -1,0 +1,28 @@
+<Project>
+
+  <!--
+    Single source of truth for cross-project MSBuild settings.
+
+    The <Version> property is read by .github/workflows/auto-tag.yml on
+    every push to master; if the parsed value has no matching v* tag the
+    workflow creates one and triggers release.yml. CI also asserts this
+    value matches repo.json (AssemblyVersion + TestingAssemblyVersion).
+  -->
+
+  <PropertyGroup Label="Identity">
+    <Version>1.0.5.0</Version>
+    <Authors>XeldarAlz</Authors>
+    <Copyright>Copyright (c) XeldarAlz</Copyright>
+    <PackageProjectUrl>https://github.com/XeldarAlz/FFXIV-PvPAutoLB</PackageProjectUrl>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/XeldarAlz/FFXIV-PvPAutoLB</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Determinism" Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+</Project>

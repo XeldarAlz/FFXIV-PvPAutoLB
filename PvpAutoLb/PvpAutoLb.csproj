@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/15.0.0">
   <PropertyGroup>
-    <Version>1.0.5.0</Version>
-    <PackageProjectUrl>https://github.com/XeldarAlz/FFXIV-PvPAutoLB</PackageProjectUrl>
-    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <!-- Version, Authors, License, RepoUrl all inherited from ../Directory.Build.props -->
     <IsPackable>false</IsPackable>
     <!-- Treat banned-API violations (RS0030) as errors. Other warnings stay warnings. -->
     <WarningsAsErrors>RS0030</WarningsAsErrors>
