@@ -52,17 +52,17 @@ Settings walkthrough:
 
 ## Install
 
-PVP Auto LB is distributed through a custom Dalamud plugin repository.
+PVP Auto LB is distributed through XeldarAlz's custom Dalamud plugin repository — one URL, all plugins.
 
 1. In-game, run `/xlsettings` → **Experimental**.
 2. Under **Custom Plugin Repositories**, paste:
    ```
-   https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/repo.json
+   https://raw.githubusercontent.com/XeldarAlz/DalamudPlugins/main/repo.json
    ```
    Tick **Enabled**, click the **+**, then **Save and Close**.
 3. Open `/xlplugins` → **All Plugins**, search for **PVP Auto LB**, and install.
 
-Updates are delivered automatically whenever a new release is cut.
+Updates are delivered automatically whenever a new release is cut. Any future plugins published under [@XeldarAlz](https://github.com/XeldarAlz) also appear here without needing a new URL.
 
 ## Commands
 
