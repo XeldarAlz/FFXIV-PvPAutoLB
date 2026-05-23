@@ -2,6 +2,24 @@
 
 All notable changes to PVP Auto LB are documented here.
 
+## v1.0.3.0
+
+Internal refactor + ecosystem-aligned tooling. No behavior changes — every feature, threshold, hotkey, and on-screen state is identical to v1.0.2.0.
+
+### Refactor
+- **AutoLbController split into a coordinator + collaborators.** The controller went from 218 lines doing 5 concerns to 126 lines of pure orchestration. Action submission and the fire-key throttle cache moved to `Core/Actions/LbFirer.cs`. The hard-target swap/restore state machine moved to `Core/Targeting/TargetSwapper.cs`. The name-blocklist scan moved to `Core/Filters/BlocklistFilter.cs`.
+- **`LbClassifier` extracted from `LbCatalog`.** The hardcoded support-job set and `Classify(jobId)` now live in `Core/Actions/LbClassifier.cs`; `LbCatalog` is action-id resolution + profile caching only.
+- **`Core/` reorganized into responsibility folders.** 16 flat files → `Actions/`, `Targeting/`, `State/`, `Duty/`, `Filters/` (with `AutoLbController`, `PvpAutoLbConstants`, `JobLookup`, `Feedback` at the top). Folder names answer "where does X live?" at a glance; namespace stays flat (`PvpAutoLb.Core`) to avoid `using`-statement churn across peer classes.
+- **`LbCatalog` lazy init via `Lazy<T>`.** Replaced the nullable `actionsByJobId` + `EnsureLoaded` pattern with `static readonly Lazy<Dictionary<uint, uint[]>>`. Thread-safe by library guarantee. Diagnostic logging folded into `BuildIndex` itself.
+- **Duplication removed across the UI layer.** Layout literals (148f, 168f, 112f…) centralized in `Windows/Layout.cs`. Threshold mode toggle + value control extracted to `Windows/Components/ThresholdWidgets.cs` (used by both global and per-job sections). `LbCard.ResolveBorder` extracted to `Windows/Components/CardBorders.cs`. Pulse-period magic numbers (600/800/900 ms) replaced with `Styling.PulseFast/PulseMedium/PulseDefault`. Throttle key strings centralized in `PvpAutoLbConstants.ThrottleKeys`.
+- **Configuration accessor cleanup.** `EffectiveMode(jobId)` / `EffectivePercent(jobId)` / `EffectiveAbsolute(jobId)` bundled into a single `EffectiveThresholdFor(jobId)` returning a `readonly record struct EffectiveThreshold`. Three call sites simplified.
+- **Dead code removed.** Unused `HpMath.EffectiveHpPercent`. Unused `LbCatalog.ResolveActionId` thin wrapper. `Plugin.WindowSystem` and `Plugin.Configuration` tightened from `public` to `internal`.
+- **Naming consistency.** `cfg` parameter/field naming standardized everywhere (one `Configuration config` outlier in `AutoLbController` and `ConfigWindow` renamed). `actionsByJob` → `actionsByJobId`. Fully-qualified `Dalamud.Game.ClientState.Objects.Types.IBattleChara` in `LbDrawState` replaced with a `using`.
+
+### Tooling
+- **`Microsoft.CodeAnalysis.BannedApiAnalyzers` added** (3.3.4) with a curated `BannedSymbols.txt`. Banned-API uses (RS0030) fail the build via `<WarningsAsErrors>RS0030</WarningsAsErrors>`. The list blocks threading APIs that leak into the game process (`Thread` ctor, `Task.Run`, `TaskFactory.StartNew`), framework-blocking calls (`Thread.Sleep`, `Task.Wait`), `Console.WriteLine`/`Write` (no console attached), and the `IBattleChara` cast-state properties known to be unreliable in PvP (carried over from ECommons' curated list). Aligned with the Dalamud ecosystem convention used by BossMod, ECommons, and RotationSolverReborn.
+- **`.editorconfig` augmented.** File-scoped namespace enforcement (matches existing codebase), trailing-whitespace trim at the `[*]` level, markdown carve-out, 2-space indent for YAML/JSON.
+
 ## v1.0.2.0
 
 Behavior fix: the LB now wins the action-queue race against other rotation plugins, so it fires the instant HP drops below the threshold instead of waiting one or more GCD cycles.

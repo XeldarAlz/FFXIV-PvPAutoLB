@@ -12,7 +12,7 @@ internal static class FilterSection
     {
         Styling.SectionLabel("Filters");
 
-        using (Card.Begin("##filters", 156f * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
+        using (Card.Begin("##filters", Layout.FilterCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
             DrawSkipDoomed(cfg);
             ImGui.Spacing();

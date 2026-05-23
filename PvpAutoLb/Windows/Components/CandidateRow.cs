@@ -25,7 +25,7 @@ internal static class CandidateRow
         using (ImRaii.PushColor(ImGuiCol.ChildBg, rowBg))
         using (ImRaii.PushColor(ImGuiCol.Border, Styling.CardBorderDim))
         using (ImRaii.PushStyle(ImGuiStyleVar.WindowPadding, new Vector2(8, 4) * ImGuiHelpers.GlobalScale))
-        using (ImRaii.Child("##cand_" + target.GameObjectId, new Vector2(-1, 30f * ImGuiHelpers.GlobalScale), true,
+        using (ImRaii.Child("##cand_" + target.GameObjectId, new Vector2(-1, Layout.CandidateRowHeight * ImGuiHelpers.GlobalScale), true,
                    ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             var avail = ImGui.GetContentRegionAvail().X;
@@ -42,7 +42,7 @@ internal static class CandidateRow
 
             using (ImRaii.PushColor(ImGuiCol.PlotHistogram, below ? Styling.AccentRed : Styling.AccentGreen))
             using (ImRaii.PushColor(ImGuiCol.FrameBg, BarBg))
-                ImGui.ProgressBar(fraction, new Vector2(barW, 14f * ImGuiHelpers.GlobalScale), $"{pct:F0}%%");
+                ImGui.ProgressBar(fraction, new Vector2(barW, Layout.HpBarHeightCandidate * ImGuiHelpers.GlobalScale), $"{pct:F0}%%");
         }
     }
 

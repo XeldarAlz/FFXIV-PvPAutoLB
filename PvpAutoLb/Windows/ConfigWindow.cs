@@ -10,7 +10,7 @@ namespace PvpAutoLb.Windows;
 
 public sealed class ConfigWindow : Window, IDisposable
 {
-    private readonly Configuration config;
+    private readonly Configuration cfg;
 
     public ConfigWindow(Plugin plugin) : base("PVP Auto LB — Settings###PvpAutoLbConfig")
     {
@@ -22,7 +22,7 @@ public sealed class ConfigWindow : Window, IDisposable
             MinimumSize = new Vector2(360, 320),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue),
         };
-        config = plugin.Configuration;
+        cfg = plugin.Configuration;
     }
 
     public void Dispose() { }
@@ -34,16 +34,16 @@ public sealed class ConfigWindow : Window, IDisposable
         style.Push(ImGuiStyleVar.ChildRounding, 6f);
         style.Push(ImGuiStyleVar.ItemSpacing, new Vector2(8, 6) * ImGuiHelpers.GlobalScale);
 
-        ThresholdSection.Draw(config);
+        ThresholdSection.Draw(cfg);
         ImGui.Spacing();
-        PerJobOverrideSection.Draw(config);
+        PerJobOverrideSection.Draw(cfg);
         ImGui.Spacing();
-        TargetingSection.Draw(config);
+        TargetingSection.Draw(cfg);
         ImGui.Spacing();
-        FilterSection.Draw(config);
+        FilterSection.Draw(cfg);
         ImGui.Spacing();
-        BlocklistSection.Draw(config);
+        BlocklistSection.Draw(cfg);
         ImGui.Spacing();
-        FeedbackSection.Draw(config);
+        FeedbackSection.Draw(cfg);
     }
 }

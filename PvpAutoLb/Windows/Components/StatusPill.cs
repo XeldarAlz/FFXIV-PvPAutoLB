@@ -9,7 +9,7 @@ internal static class StatusPill
 {
     public static (Vector4 Color, string Text) Resolve(bool firing, bool wouldFire, LbReadyReason readiness, bool enabled)
     {
-        if (firing)    return (Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, 600), "FIRING");
+        if (firing)    return (Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, Styling.PulseFast), "FIRING");
         if (wouldFire) return (new Vector4(0.75f, 0.45f, 0.48f, 1f), "PAUSED");
         if (!enabled)  return (Styling.TextMuted, "DISABLED");
         return readiness switch

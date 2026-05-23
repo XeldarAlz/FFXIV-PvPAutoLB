@@ -15,8 +15,8 @@ internal static class BlocklistSection
         Styling.SectionLabel("Player blocklist");
 
         var rows = cfg.NameBlocklist.Count;
-        var listH = System.Math.Min(rows, MaxRowsBeforeScroll) * 26f;
-        var height = (78f + listH) * ImGuiHelpers.GlobalScale;
+        var listH = System.Math.Min(rows, MaxRowsBeforeScroll) * Layout.BlocklistRowHeight;
+        var height = (Layout.BlocklistBaseHeight + listH) * ImGuiHelpers.GlobalScale;
 
         using (Card.Begin("##blocklist", height, Styling.CardBg, Styling.CardBorderDim))
         {
@@ -53,7 +53,7 @@ internal static class BlocklistSection
         }
 
         var rows = cfg.NameBlocklist.Count;
-        var listH = System.Math.Min(rows, MaxRowsBeforeScroll) * 26f * ImGuiHelpers.GlobalScale;
+        var listH = System.Math.Min(rows, MaxRowsBeforeScroll) * Layout.BlocklistRowHeight * ImGuiHelpers.GlobalScale;
 
         using (ImRaii.Child("##blocklist_rows", new System.Numerics.Vector2(-1, listH), false))
         {

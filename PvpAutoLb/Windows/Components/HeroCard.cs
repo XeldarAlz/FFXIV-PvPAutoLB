@@ -10,7 +10,6 @@ namespace PvpAutoLb.Windows.Components;
 
 internal static class HeroCard
 {
-    private static readonly Vector4 BorderWouldFire = new(0.45f, 0.22f, 0.24f, 1f);
     private static readonly Vector4 BadgeWouldFire = new(0.75f, 0.45f, 0.48f, 1f);
 
     public static void Draw(IBattleChara target, bool below, Configuration cfg, LbDrawState state)
@@ -18,7 +17,7 @@ internal static class HeroCard
         var firing = below && cfg.Enabled && state.CanFire;
         var border = ResolveBorder(below, cfg.Enabled, state.CanFire, firing);
 
-        using (Card.Begin("##hero", 92f * ImGuiHelpers.GlobalScale, Styling.CardBgHero, border, 1.5f))
+        using (Card.Begin("##hero", Layout.HeroCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBgHero, border, 1.5f))
         {
             ImGui.SetWindowFontScale(1.22f);
             ImGui.TextUnformatted(target.Name.TextValue);
@@ -30,7 +29,7 @@ internal static class HeroCard
             using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextDim))
                 ImGui.TextUnformatted(distLabel);
 
-            HpBar.Draw(target.CurrentHp, target.MaxHp, HpMath.ShieldHp(target), firing, cfg, state.JobId, 24f);
+            HpBar.Draw(target.CurrentHp, target.MaxHp, HpMath.ShieldHp(target), firing, cfg, state.JobId, Layout.HpBarHeightHero);
 
             ImGui.Spacing();
             DrawStatusBadge(below, firing, cfg, state);
@@ -39,8 +38,8 @@ internal static class HeroCard
 
     private static Vector4 ResolveBorder(bool below, bool enabled, bool canFire, bool firing)
     {
-        if (firing) return Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, 800);
-        if (below && canFire) return BorderWouldFire;
+        if (firing) return Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, Styling.PulseMedium);
+        if (below && canFire) return Styling.BorderWouldFire;
         if (below) return Styling.AccentAmber;
         if (enabled) return Styling.AccentOrange;
         return Styling.CardBorderDim;
@@ -54,7 +53,7 @@ internal static class HeroCard
         if (firing)
         {
             icon = FontAwesomeIcon.BoltLightning;
-            color = Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, 600);
+            color = Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, Styling.PulseFast);
             text = "Firing — target below threshold";
         }
         else if (below && !cfg.Enabled)

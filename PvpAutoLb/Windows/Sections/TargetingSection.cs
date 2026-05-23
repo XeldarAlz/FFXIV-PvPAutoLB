@@ -11,7 +11,7 @@ internal static class TargetingSection
     {
         Styling.SectionLabel("Targeting");
 
-        using (Card.Begin("##targeting", 112f * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
+        using (Card.Begin("##targeting", Layout.TargetingCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
             var auto = cfg.AutoSelectLowestHp;
             if (ImGui.Checkbox("Auto-select lowest-HP hostile in range", ref auto))

@@ -1,6 +1,20 @@
+using Dalamud.Game.ClientState.Objects.Types;
 using ECommons.GameHelpers;
 
 namespace PvpAutoLb.Core;
+
+internal enum LbKind
+{
+    Offensive,
+    Support,
+}
+
+internal enum LbReadyReason
+{
+    Ready,
+    GaugeLow,
+    OutOfRange,
+}
 
 internal readonly record struct LbDrawState(
     uint JobId,
@@ -15,11 +29,12 @@ internal readonly record struct LbDrawState(
     public static LbDrawState Resolve(AutoLbController ctrl)
     {
         var jobId = Player.Available ? Player.Object!.ClassJob.RowId : 0u;
-        var actionId = LbCatalog.ResolveActionId(jobId);
+        var ids = LbCatalog.ResolveActionIds(jobId);
+        var actionId = ids.Count > 0 ? ids[0] : 0u;
         if (actionId == 0)
             return new LbDrawState(jobId, 0, false, LbReadyReason.GaugeLow, LbTargetingProfile.None);
 
-        var isSupport = LbCatalog.Classify(jobId) == LbKind.Support;
+        var isSupport = LbClassifier.Classify(jobId) == LbKind.Support;
         var profile = ctrl.LastProfile.ActionId == actionId
             ? ctrl.LastProfile
             : LbTargetingProfile.FromAction(actionId);
@@ -31,7 +46,7 @@ internal readonly record struct LbDrawState(
         return new LbDrawState(jobId, actionId, isSupport, readiness, profile);
     }
 
-    private static LbReadyReason InferReason(Dalamud.Game.ClientState.Objects.Types.IBattleChara? target, LbTargetingProfile profile)
+    private static LbReadyReason InferReason(IBattleChara? target, LbTargetingProfile profile)
     {
         if (target != null && profile.Range > 0 && Geo.DistanceToPlayer(target) > profile.Range)
             return LbReadyReason.OutOfRange;

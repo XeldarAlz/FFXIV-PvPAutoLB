@@ -18,7 +18,7 @@ internal static class HpBar
         var fraction = max == 0 ? 0f : (float)cur / max;
         var pct = fraction * 100f;
         var barColor = firing
-            ? Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, 600)
+            ? Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, Styling.PulseFast)
             : Styling.AccentGreen;
 
         var barHeight = heightDip * ImGuiHelpers.GlobalScale;
@@ -44,9 +44,10 @@ internal static class HpBar
                 ImGui.GetColorU32(ShieldColor));
         }
 
-        var thresholdFraction = cfg.EffectiveMode(jobId) == ThresholdMode.Percent
-            ? Math.Clamp(cfg.EffectivePercent(jobId) / 100f, 0f, 1f)
-            : max == 0 ? 0f : Math.Clamp((float)cfg.EffectiveAbsolute(jobId) / max, 0f, 1f);
+        var th = cfg.EffectiveThresholdFor(jobId);
+        var thresholdFraction = th.Mode == ThresholdMode.Percent
+            ? Math.Clamp(th.Percent / 100f, 0f, 1f)
+            : max == 0 ? 0f : Math.Clamp((float)th.Absolute / max, 0f, 1f);
 
         var x = rectMin.X + width * thresholdFraction;
         draw.AddLine(new Vector2(x, rectMin.Y - 1), new Vector2(x, rectMax.Y + 1),

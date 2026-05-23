@@ -22,7 +22,7 @@ internal static class MasterButton
         using (ImRaii.PushColor(ImGuiCol.ButtonActive, bgActive))
         {
             var label = cfg.Enabled ? "● ENABLED" : "○ DISABLED";
-            if (ImGui.Button(label, new Vector2(-1, 32f * ImGuiHelpers.GlobalScale)))
+            if (ImGui.Button(label, new Vector2(-1, Layout.MasterButtonHeight * ImGuiHelpers.GlobalScale)))
             {
                 cfg.Enabled = !cfg.Enabled;
                 cfg.Save();

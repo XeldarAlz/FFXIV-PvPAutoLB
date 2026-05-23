@@ -20,19 +20,24 @@ internal static class Styling
     public static readonly Vector4 CardBgHero      = new(0.12f, 0.08f, 0.09f, 0.90f);
     public static readonly Vector4 CardBgSoft      = new(0.10f, 0.11f, 0.13f, 0.60f);
     public static readonly Vector4 CardBorderDim   = new(0.22f, 0.24f, 0.28f, 1.00f);
+    public static readonly Vector4 BorderWouldFire = new(0.45f, 0.22f, 0.24f, 1.00f);
 
     public static readonly Vector4 TextStrong      = new(0.96f, 0.96f, 0.96f, 1.00f);
     public static readonly Vector4 TextSecondary   = new(0.78f, 0.78f, 0.82f, 1.00f);
     public static readonly Vector4 TextDim         = new(0.55f, 0.55f, 0.60f, 1.00f);
     public static readonly Vector4 TextMuted       = new(0.40f, 0.40f, 0.44f, 1.00f);
 
-    public static float Pulse(double periodMs = 900.0)
+    public const double PulseFast = 600.0;
+    public const double PulseMedium = 800.0;
+    public const double PulseDefault = 900.0;
+
+    public static float Pulse(double periodMs = PulseDefault)
     {
         var t = (Environment.TickCount % periodMs) / periodMs;
         return (float)((Math.Sin(t * Math.PI * 2.0) + 1.0) * 0.5);
     }
 
-    public static Vector4 PulseColor(Vector4 a, Vector4 b, double periodMs = 900.0)
+    public static Vector4 PulseColor(Vector4 a, Vector4 b, double periodMs = PulseDefault)
         => Vector4.Lerp(a, b, Pulse(periodMs));
 
     public static IDisposable PushCardStyle()

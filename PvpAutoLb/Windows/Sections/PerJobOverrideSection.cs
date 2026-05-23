@@ -1,5 +1,3 @@
-using System;
-using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -23,7 +21,7 @@ internal static class PerJobOverrideSection
 
         var jobName = JobLookup.Name(jobId);
         var hasOverride = cfg.HasJobOverride(jobId);
-        var height = hasOverride ? 168f : 60f;
+        var height = hasOverride ? Layout.JobOverrideCardHeightExpanded : Layout.JobOverrideCardHeightCollapsed;
 
         using (Card.Begin("##joboverride", height * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
@@ -44,7 +42,7 @@ internal static class PerJobOverrideSection
 
     private static void DrawOfflineCard()
     {
-        using (Card.Begin("##joboverride_off", 56f * ImGuiHelpers.GlobalScale, Styling.CardBgSoft, Styling.CardBorderDim))
+        using (Card.Begin("##joboverride_off", Layout.JobOverrideOfflineCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBgSoft, Styling.CardBorderDim))
         {
             using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextDim))
                 ImGui.TextUnformatted("Log into a job to set a per-job override.");
@@ -54,42 +52,23 @@ internal static class PerJobOverrideSection
     private static void DrawControls(Configuration cfg, uint jobId)
     {
         var j = cfg.EnsureJobOverride(jobId);
-        var avail = ImGui.GetContentRegionAvail().X;
-        var half = (avail - ImGui.GetStyle().ItemSpacing.X) / 2f;
-        var size = new Vector2(half, 26f * ImGuiHelpers.GlobalScale);
 
-        if (SegmentedControl.DrawSegment("Percent of max", "job_pct", j.Mode == ThresholdMode.Percent, size))
+        var mode = j.Mode;
+        if (ThresholdWidgets.DrawModeToggle("job", ref mode, segmentHeightDip: Layout.SegmentHeightCompact))
         {
-            j.Mode = ThresholdMode.Percent;
-            cfg.Save();
-        }
-        ImGui.SameLine();
-        if (SegmentedControl.DrawSegment("Absolute HP", "job_abs", j.Mode == ThresholdMode.Absolute, size))
-        {
-            j.Mode = ThresholdMode.Absolute;
+            j.Mode = mode;
             cfg.Save();
         }
 
         ImGui.Spacing();
-        ImGui.SetNextItemWidth(-1);
 
-        if (j.Mode == ThresholdMode.Percent)
+        var pct = j.Percent;
+        var abs = j.Absolute;
+        if (ThresholdWidgets.DrawValueControl("job", j.Mode, ref pct, ref abs))
         {
-            var pct = j.Percent;
-            if (ImGui.SliderFloat("##jobpct", ref pct, 1f, 99f, "%.0f%% of max HP"))
-            {
-                j.Percent = pct;
-                cfg.SaveDebounced();
-            }
-        }
-        else
-        {
-            var abs = (int)j.Absolute;
-            if (ImGui.DragInt("##jobabs", ref abs, 100f, 1, 500_000, "%d HP"))
-            {
-                j.Absolute = (uint)Math.Max(1, abs);
-                cfg.SaveDebounced();
-            }
+            j.Percent = pct;
+            j.Absolute = abs;
+            cfg.SaveDebounced();
         }
     }
 }

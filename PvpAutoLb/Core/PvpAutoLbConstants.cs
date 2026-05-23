@@ -29,4 +29,11 @@ internal static class PvpAutoLbConstants
 
     // ActionCategory row id for "Limit Break" in the Action sheet.
     public const uint LimitBreakCategoryId = 15;
+
+    public static class ThrottleKeys
+    {
+        public const string Tick = "PvpAutoLb.Tick";
+        public const string Save = "PvpAutoLb.ConfigSave";
+        public const string FirePrefix = "PvpAutoLb.Fire.";
+    }
 }

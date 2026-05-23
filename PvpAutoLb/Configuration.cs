@@ -19,11 +19,11 @@ public class JobThreshold
     public uint Absolute { get; set; } = PvpAutoLbConstants.DefaultThresholdAbsolute;
 }
 
+public readonly record struct EffectiveThreshold(ThresholdMode Mode, float Percent, uint Absolute);
+
 [Serializable]
 public class Configuration : IPluginConfiguration
 {
-    private const string SaveThrottleKey = "PvpAutoLb.ConfigSave";
-
     public int Version { get; set; } = 2;
 
     public bool Enabled { get; set; } = true;
@@ -50,14 +50,10 @@ public class Configuration : IPluginConfiguration
     public uint LifetimeKills { get; set; }
     public uint LifetimeEnemiesAffected { get; set; }
 
-    public ThresholdMode EffectiveMode(uint jobId)
-        => PerJobThresholds.TryGetValue(jobId, out var j) ? j.Mode : ThresholdMode;
-
-    public float EffectivePercent(uint jobId)
-        => PerJobThresholds.TryGetValue(jobId, out var j) ? j.Percent : HpThresholdPercent;
-
-    public uint EffectiveAbsolute(uint jobId)
-        => PerJobThresholds.TryGetValue(jobId, out var j) ? j.Absolute : HpThresholdAbsolute;
+    public EffectiveThreshold EffectiveThresholdFor(uint jobId)
+        => PerJobThresholds.TryGetValue(jobId, out var j)
+            ? new EffectiveThreshold(j.Mode, j.Percent, j.Absolute)
+            : new EffectiveThreshold(ThresholdMode, HpThresholdPercent, HpThresholdAbsolute);
 
     public bool HasJobOverride(uint jobId) => jobId != 0 && PerJobThresholds.ContainsKey(jobId);
 
@@ -80,9 +76,10 @@ public class Configuration : IPluginConfiguration
 
     public string FormatEffective(uint jobId, string prefix = "Fires below ")
     {
-        var label = EffectiveMode(jobId) == ThresholdMode.Percent
-            ? $"{prefix}{EffectivePercent(jobId):F0}% HP"
-            : $"{prefix}{EffectiveAbsolute(jobId):N0} HP";
+        var t = EffectiveThresholdFor(jobId);
+        var label = t.Mode == ThresholdMode.Percent
+            ? $"{prefix}{t.Percent:F0}% HP"
+            : $"{prefix}{t.Absolute:N0} HP";
         return HasJobOverride(jobId) ? label + " (per-job)" : label;
     }
 
@@ -91,7 +88,7 @@ public class Configuration : IPluginConfiguration
     // Slider/drag callbacks fire every frame; debounce so we don't hammer disk.
     public void SaveDebounced()
     {
-        if (EzThrottler.Throttle(SaveThrottleKey, PvpAutoLbConstants.SaveThrottleMs))
+        if (EzThrottler.Throttle(PvpAutoLbConstants.ThrottleKeys.Save, PvpAutoLbConstants.SaveThrottleMs))
             Save();
     }
 }

@@ -11,7 +11,7 @@ internal static class FeedbackSection
     {
         Styling.SectionLabel("Feedback");
 
-        using (Card.Begin("##feedback", 116f * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
+        using (Card.Begin("##feedback", Layout.FeedbackCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
             var sound = cfg.PlaySoundOnFire;
             if (ImGui.Checkbox("Play sound on fire", ref sound))

@@ -12,8 +12,6 @@ namespace PvpAutoLb.Windows.Components;
 
 internal static class LbCard
 {
-    private static readonly Vector4 BorderWouldFire = new(0.45f, 0.22f, 0.24f, 1f);
-
     public static void Draw(Configuration cfg, AutoLbController ctrl, LbDrawState state)
     {
         Styling.SectionLabel("Limit Break");
@@ -34,8 +32,8 @@ internal static class LbCard
             && HpMath.IsBelowThreshold(target, cfg, state.JobId);
         var firing = wouldFire && cfg.Enabled;
 
-        var border = ResolveBorder(state.ActionReady, cfg.Enabled, wouldFire, firing);
-        var iconSize = 40f * ImGuiHelpers.GlobalScale;
+        var border = CardBorders.Resolve(state.ActionReady, cfg.Enabled, wouldFire, firing);
+        var iconSize = Layout.LbIconSize * ImGuiHelpers.GlobalScale;
         var lineSpacing = ImGui.GetTextLineHeightWithSpacing();
         var bodyLines = state.IsSupport ? 1 : 2;
         var contentH = MathF.Max(iconSize, lineSpacing) + bodyLines * lineSpacing;
@@ -45,37 +43,40 @@ internal static class LbCard
         using (Card.Begin("##lbcard", cardHeight, Styling.CardBg, border, firing ? 1.5f : 1.0f))
         {
             var rowTopY = ImGui.GetCursorPosY();
-            DrawIcon(iconId, iconSize, firing, wouldFire, state.ActionReady, cfg.Enabled);
-            ImGui.SameLine();
-
-            var nameY = rowTopY + (iconSize - ImGui.GetTextLineHeight()) * 0.5f;
-            ImGui.SetCursorPosY(nameY);
-            ImGui.SetWindowFontScale(1.10f);
-            using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextStrong))
-                ImGui.TextUnformatted(actionName);
-            ImGui.SetWindowFontScale(1.0f);
-
-            DrawPillRightAligned(state, firing, wouldFire, cfg.Enabled, nameY);
-
-            ImGui.SetCursorPosY(rowTopY + MathF.Max(iconSize, lineSpacing) + 2f * ImGuiHelpers.GlobalScale);
-            var threshLabel = state.IsSupport ? "Support LB — not auto-fired" : cfg.FormatEffective(state.JobId);
-            using (ImRaii.PushColor(ImGuiCol.Text, state.IsSupport ? Styling.AccentAmber : Styling.TextDim))
-                ImGui.TextUnformatted(threshLabel);
-
-            if (!state.IsSupport)
-            {
-                using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextMuted))
-                    ImGui.TextUnformatted(state.Profile.Describe(ctrl.LastEnemiesAffected, firing));
-            }
+            DrawHeaderRow(state, cfg, iconId, iconSize, actionName, firing, wouldFire, rowTopY);
+            DrawSubtitle(state, cfg, ctrl, firing, rowTopY, iconSize, lineSpacing);
         }
     }
 
-    private static Vector4 ResolveBorder(bool ready, bool enabled, bool wouldFire, bool firing)
+    private static void DrawHeaderRow(LbDrawState state, Configuration cfg, uint iconId, float iconSize,
+        string actionName, bool firing, bool wouldFire, float rowTopY)
     {
-        if (firing) return Styling.PulseColor(Styling.AccentRed, Styling.AccentRedBright, 600);
-        if (wouldFire) return BorderWouldFire;
-        if (ready && enabled) return Styling.AccentOrange;
-        return Styling.CardBorderDim;
+        DrawIcon(iconId, iconSize, firing, wouldFire, state.ActionReady, cfg.Enabled);
+        ImGui.SameLine();
+
+        var nameY = rowTopY + (iconSize - ImGui.GetTextLineHeight()) * 0.5f;
+        ImGui.SetCursorPosY(nameY);
+        ImGui.SetWindowFontScale(1.10f);
+        using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextStrong))
+            ImGui.TextUnformatted(actionName);
+        ImGui.SetWindowFontScale(1.0f);
+
+        DrawPillRightAligned(state, firing, wouldFire, cfg.Enabled, nameY);
+    }
+
+    private static void DrawSubtitle(LbDrawState state, Configuration cfg, AutoLbController ctrl,
+        bool firing, float rowTopY, float iconSize, float lineSpacing)
+    {
+        ImGui.SetCursorPosY(rowTopY + MathF.Max(iconSize, lineSpacing) + 2f * ImGuiHelpers.GlobalScale);
+        var threshLabel = state.IsSupport ? "Support LB — not auto-fired" : cfg.FormatEffective(state.JobId);
+        using (ImRaii.PushColor(ImGuiCol.Text, state.IsSupport ? Styling.AccentAmber : Styling.TextDim))
+            ImGui.TextUnformatted(threshLabel);
+
+        if (!state.IsSupport)
+        {
+            using (ImRaii.PushColor(ImGuiCol.Text, Styling.TextMuted))
+                ImGui.TextUnformatted(state.Profile.Describe(ctrl.LastEnemiesAffected, firing));
+        }
     }
 
     private static void DrawIcon(uint iconId, float size, bool firing, bool wouldFire, bool ready, bool enabled)
@@ -85,13 +86,13 @@ internal static class LbCard
 
         if (firing)
         {
-            var alpha = 0.35f + 0.55f * Styling.Pulse(600);
+            var alpha = 0.35f + 0.55f * Styling.Pulse(Styling.PulseFast);
             var glow = new Vector4(Styling.AccentRed.X, Styling.AccentRed.Y, Styling.AccentRed.Z, alpha);
             draw.AddRectFilled(pos - new Vector2(6, 6), pos + new Vector2(size + 6, size + 6),
                 ImGui.GetColorU32(glow), 10f);
         }
 
-        var border = ResolveBorder(ready, enabled, wouldFire, firing);
+        var border = CardBorders.Resolve(ready, enabled, wouldFire, firing);
         draw.AddRectFilled(pos - new Vector2(3, 3), pos + new Vector2(size + 3, size + 3),
             ImGui.GetColorU32(border), 6f);
 

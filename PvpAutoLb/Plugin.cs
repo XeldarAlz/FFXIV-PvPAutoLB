@@ -22,8 +22,8 @@ public sealed class Plugin : IDalamudPlugin
     private const string PrimaryCommand = "/pvpautolb";
     private const string AliasCommand = "/palb";
 
-    public Configuration Configuration { get; }
-    public WindowSystem WindowSystem { get; } = new("PvpAutoLb");
+    internal Configuration Configuration { get; }
+    internal WindowSystem WindowSystem { get; } = new("PvpAutoLb");
     internal AutoLbController Controller { get; }
 
     private readonly ConfigWindow configWindow;

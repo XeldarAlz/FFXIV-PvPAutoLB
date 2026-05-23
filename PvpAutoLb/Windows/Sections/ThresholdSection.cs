@@ -16,7 +16,7 @@ internal static class ThresholdSection
     {
         Styling.SectionLabel("Threshold");
 
-        using (Card.Begin("##threshold", 148f * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
+        using (Card.Begin("##threshold", Layout.ThresholdCardHeight * ImGuiHelpers.GlobalScale, Styling.CardBg, Styling.CardBorderDim))
         {
             DrawModeToggle(cfg);
             ImGui.Spacing();
@@ -28,43 +28,23 @@ internal static class ThresholdSection
 
     private static void DrawModeToggle(Configuration cfg)
     {
-        var avail = ImGui.GetContentRegionAvail().X;
-        var half = (avail - ImGui.GetStyle().ItemSpacing.X) / 2f;
-        var size = new Vector2(half, 28f * ImGuiHelpers.GlobalScale);
-
-        if (SegmentedControl.DrawSegment("Percent of max", "thresh_pct", cfg.ThresholdMode == ThresholdMode.Percent, size))
+        var mode = cfg.ThresholdMode;
+        if (ThresholdWidgets.DrawModeToggle("thresh", ref mode))
         {
-            cfg.ThresholdMode = ThresholdMode.Percent;
-            cfg.Save();
-        }
-        ImGui.SameLine();
-        if (SegmentedControl.DrawSegment("Absolute HP", "thresh_abs", cfg.ThresholdMode == ThresholdMode.Absolute, size))
-        {
-            cfg.ThresholdMode = ThresholdMode.Absolute;
+            cfg.ThresholdMode = mode;
             cfg.Save();
         }
     }
 
     private static void DrawValueControl(Configuration cfg)
     {
-        ImGui.SetNextItemWidth(-1);
-        if (cfg.ThresholdMode == ThresholdMode.Percent)
+        var pct = cfg.HpThresholdPercent;
+        var abs = cfg.HpThresholdAbsolute;
+        if (ThresholdWidgets.DrawValueControl("thresh", cfg.ThresholdMode, ref pct, ref abs))
         {
-            var pct = cfg.HpThresholdPercent;
-            if (ImGui.SliderFloat("##pct", ref pct, 1f, 99f, "%.0f%% of max HP"))
-            {
-                cfg.HpThresholdPercent = pct;
-                cfg.SaveDebounced();
-            }
-        }
-        else
-        {
-            var abs = (int)cfg.HpThresholdAbsolute;
-            if (ImGui.DragInt("##abs", ref abs, 100f, 1, 500_000, "%d HP"))
-            {
-                cfg.HpThresholdAbsolute = (uint)Math.Max(1, abs);
-                cfg.SaveDebounced();
-            }
+            cfg.HpThresholdPercent = pct;
+            cfg.HpThresholdAbsolute = abs;
+            cfg.SaveDebounced();
         }
     }
 
@@ -74,7 +54,7 @@ internal static class ThresholdSection
             ? Math.Clamp(cfg.HpThresholdPercent / 100f, 0.01f, 0.99f)
             : Math.Clamp((float)cfg.HpThresholdAbsolute / SamplePreviewMaxHp, 0.01f, 0.99f);
 
-        var barHeight = 18f * ImGuiHelpers.GlobalScale;
+        var barHeight = Layout.PreviewBarHeight * ImGuiHelpers.GlobalScale;
         using (ImRaii.PushColor(ImGuiCol.PlotHistogram, Styling.AccentGreen))
         using (ImRaii.PushColor(ImGuiCol.FrameBg, new Vector4(0.06f, 0.07f, 0.08f, 0.90f)))
             ImGui.ProgressBar(1.0f, new Vector2(-1, barHeight), "preview");

@@ -12,40 +12,17 @@ internal static class LbCatalog
 {
     private static readonly uint[] EmptyIds = Array.Empty<uint>();
 
-    // Job ids whose PvP LB is defensive or support-focused. Tagged here rather
-    // than detected, because Lumina exposes "self-target" but not "intent",
-    // and several offensive LBs also self-target during the cast.
-    private static readonly HashSet<uint> SupportJobs = new()
-    {
-        19, // PLD — Phalanx
-        21, // WAR — Primal Scream
-        23, // BRD — Final Fantasia
-        25, // BLM — Soul Resonance
-        33, // AST — Celestial River
-        38, // DNC — Contradance
-        39, // RPR — Tenebrae Lemurum
-        40, // SGE — Mesotes
-        42, // PCT — Advent of Chocobastion
-    };
-
-    private static Dictionary<uint, uint[]>? actionsByJob;
+    private static readonly Lazy<Dictionary<uint, uint[]>> ActionsByJobId =
+        new(BuildIndex, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
     private static readonly Dictionary<uint, LbTargetingProfile> ProfileCache = new();
 
     public static IReadOnlyList<uint> ResolveActionIds(uint classJobId)
-    {
-        EnsureLoaded();
-        return actionsByJob!.TryGetValue(classJobId, out var ids) ? ids : EmptyIds;
-    }
-
-    public static uint ResolveActionId(uint classJobId)
-    {
-        var list = ResolveActionIds(classJobId);
-        return list.Count > 0 ? list[0] : 0u;
-    }
+        => ActionsByJobId.Value.TryGetValue(classJobId, out var ids) ? ids : EmptyIds;
 
     public static LbTargetingProfile ResolveProfile(uint classJobId)
     {
-        var actionId = ResolveActionId(classJobId);
+        var ids = ResolveActionIds(classJobId);
+        var actionId = ids.Count > 0 ? ids[0] : 0u;
         if (actionId == 0) return LbTargetingProfile.None;
         if (!ProfileCache.TryGetValue(actionId, out var p))
         {
@@ -55,15 +32,10 @@ internal static class LbCatalog
         return p;
     }
 
-    public static LbKind Classify(uint classJobId)
-        => SupportJobs.Contains(classJobId) ? LbKind.Support : LbKind.Offensive;
-
-    private static void EnsureLoaded()
+    public static string GetActionName(uint actionId)
     {
-        if (actionsByJob != null) return;
-        actionsByJob = BuildIndex();
-        LogResolvedMap();
-        if (actionsByJob.Count == 0) DumpDiagnostics();
+        var sheet = Svc.Data.GetExcelSheet<LuminaAction>();
+        return sheet?.GetRowOrDefault(actionId)?.Name.ToString() ?? $"action {actionId}";
     }
 
     private static Dictionary<uint, uint[]> BuildIndex()
@@ -104,15 +76,18 @@ internal static class LbCatalog
             }
             result[jobId] = ordered.ToArray();
         }
+
+        LogResolvedMap(result);
+        if (result.Count == 0) DumpDiagnostics();
         return result;
     }
 
-    private static void LogResolvedMap()
+    private static void LogResolvedMap(Dictionary<uint, uint[]> map)
     {
-        Svc.Log.Info($"[PvpAutoLb] resolved PvP LBs for {actionsByJob!.Count} jobs");
+        Svc.Log.Info($"[PvpAutoLb] resolved PvP LBs for {map.Count} jobs");
         var jobs = Svc.Data.GetExcelSheet<LuminaClassJob>();
         var actions = Svc.Data.GetExcelSheet<LuminaAction>();
-        foreach (var (jobId, ids) in actionsByJob.OrderBy(kv => kv.Key))
+        foreach (var (jobId, ids) in map.OrderBy(kv => kv.Key))
         {
             var jobName = jobs?.GetRowOrDefault(jobId)?.Abbreviation.ToString() ?? $"Job{jobId}";
             var parts = string.Join(", ", ids.Select(id =>
