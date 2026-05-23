@@ -6,10 +6,6 @@ internal static class PvpAutoLbConstants
     public const ulong NoTargetEntityId = 0xE000_0000UL;
 
     public const int TickThrottleMs = 33;
-    // Short window after an accepted submission. Long enough to avoid double-
-    // queueing the same fire, short enough that a fizzled queue (target died /
-    // moved out of range when flushed) retargets quickly on the next tick.
-    public const int FireThrottleMs = 250;
     public const int SaveThrottleMs = 250;
 
     // If a target's predicted time-to-death is shorter than this, skip the LB —
@@ -34,7 +30,6 @@ internal static class PvpAutoLbConstants
     {
         public const string Tick = "PvpAutoLb.Tick";
         public const string Save = "PvpAutoLb.ConfigSave";
-        public const string FirePrefix = "PvpAutoLb.Fire.";
     }
 
     public static class StatusIds

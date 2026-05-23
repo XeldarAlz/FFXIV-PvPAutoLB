@@ -2,6 +2,17 @@
 
 All notable changes to PVP Auto LB are documented here.
 
+## v1.0.5.0
+
+Behavior fix: the LB now wins the action-queue race against Rotation Solver and other plugins that submit actions every tick.
+
+### Fixed
+- **Removed the 250ms submission throttle in `LbFirer`.** v1.0.2.0 lowered the throttle from 500 ms → 250 ms and the changelog claimed we now "submit every tick", but the throttle was still in place — we submitted at ~4 Hz while Rotation Solver submits at ~30 Hz, so RS overwrote our queued LB roughly 7 out of every 8 times the user's anim-lock cleared. We now submit on every ready tick and confirm a fire by observing the action's `IsReady` flip false on a subsequent tick (the action landed and went on cooldown). The state machine tracks each action's pending status in a small `Dictionary<uint, bool>`. Net effect: when racing with RS, we become the last writer at 30 Hz instead of every-250ms, so the LB lands the moment our threshold is crossed.
+- **Stats and feedback now count one fire per actual fire.** Because submissions can be overwritten by competing plugins or fizzle when the target dies in the queue window, counting submissions as fires (previous behavior, gated only by the 250 ms throttle) could over- or under-count. The new confirmation gate means `Stats.RecordFire`, the optional chat/sound feedback, and the `[PvpAutoLb] fired …` log line all fire exactly once per LB that actually landed.
+
+### Removed
+- `PvpAutoLbConstants.FireThrottleMs` and `ThrottleKeys.FirePrefix` — both unused after the rewrite.
+
 ## v1.0.4.0
 
 Behavior fix: the LB no longer auto-fires on targets using PvP Guard.
