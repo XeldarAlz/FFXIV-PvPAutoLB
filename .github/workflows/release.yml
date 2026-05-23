@@ -121,11 +121,20 @@ jobs:
             exit 0
           }
           git commit -m "Release ${{ steps.tag.outputs.target }}: bump repo.json"
-          # Rebase onto latest master to avoid push rejection if a concurrent
-          # workflow (e.g. DownloadCount bump) advanced master during the build.
+          # -X theirs auto-resolves any repo.json conflict in favour of our just-bumped values
+          # (rebase semantics: "theirs" = the commits being rebased, i.e. ours).
+          # Without it, a concurrent push that touched repo.json leaves conflict markers,
+          # push then reports "Everything up-to-date" with exit 0, and downstream steps
+          # silently consume the corrupted file.
           for ($i = 1; $i -le 5; $i++) {
             git fetch origin master
-            git rebase origin/master
+            git rebase -X theirs origin/master
+            if ($LASTEXITCODE -ne 0) {
+              git rebase --abort 2>$null
+              Write-Host "Rebase failed (attempt $i); retrying..."
+              Start-Sleep -Seconds 2
+              continue
+            }
             git push origin HEAD:master
             if ($LASTEXITCODE -eq 0) { exit 0 }
             Write-Host "Push rejected (attempt $i); retrying after rebase..."
@@ -170,7 +179,13 @@ jobs:
           git commit -m "Bump $($localEntry.InternalName) to $($localEntry.AssemblyVersion)"
           for ($i = 1; $i -le 5; $i++) {
             git fetch origin main
-            git rebase origin/main
+            git rebase -X theirs origin/main
+            if ($LASTEXITCODE -ne 0) {
+              git rebase --abort 2>$null
+              Write-Host "Hub rebase failed (attempt $i); retrying..."
+              Start-Sleep -Seconds 2
+              continue
+            }
             git push origin HEAD:main
             if ($LASTEXITCODE -eq 0) { Pop-Location; exit 0 }
             Write-Host "Hub push rejected (attempt $i); retrying after rebase..."
