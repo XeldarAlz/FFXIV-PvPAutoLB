@@ -130,3 +130,48 @@ jobs:
           }
           Write-Error 'Failed to push repo.json bump after 5 attempts.'
           exit 1
+
+      # Mirror this plugin's repo.json entry into the multi-plugin hub repo so
+      # users only need to add one Dalamud URL to get all of @XeldarAlz's
+      # plugins. The hub repo holds a JSON array; we upsert (update or append)
+      # the entry keyed by InternalName.
+      - name: Mirror entry into DalamudPlugins hub
+        if: ${{ env.HUB_REPO_PAT != '' }}
+        env:
+          HUB_REPO_PAT: ${{ secrets.HUB_REPO_PAT }}
+        shell: pwsh
+        run: |
+          $pat = $env:HUB_REPO_PAT
+          git clone --depth 1 "https://x-access-token:$pat@github.com/XeldarAlz/DalamudPlugins.git" hub
+          Push-Location hub
+          $localEntry = (Get-Content -Raw -Path '../repo.json' | ConvertFrom-Json)[0]
+          $hub = Get-Content -Raw -Path 'repo.json' | ConvertFrom-Json
+          $existing = $hub | Where-Object { $_.InternalName -eq $localEntry.InternalName } | Select-Object -First 1
+          if ($existing) {
+            $idx = [Array]::IndexOf($hub, $existing)
+            $hub[$idx] = $localEntry
+          } else {
+            $hub = @($hub) + $localEntry
+          }
+          ConvertTo-Json -InputObject $hub -Depth 10 -AsArray | Set-Content -Path 'repo.json' -Encoding utf8
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add repo.json
+          if (-not (git status --porcelain)) {
+            Write-Host 'Hub repo.json already up to date.'
+            Pop-Location
+            exit 0
+          }
+          git commit -m "Bump $($localEntry.InternalName) to $($localEntry.AssemblyVersion)"
+          for ($i = 1; $i -le 5; $i++) {
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) { Pop-Location; exit 0 }
+            Write-Host "Hub push rejected (attempt $i); retrying after rebase..."
+            Start-Sleep -Seconds 2
+          }
+          Pop-Location
+          Write-Error 'Failed to push hub update after 5 attempts.'
+          exit 1
