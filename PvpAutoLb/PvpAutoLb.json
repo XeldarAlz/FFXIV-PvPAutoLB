@@ -1,15 +1,15 @@
 {
-  "Author": "XeldarAlz",
-  "Name": "PVP Auto LB",
-  "Punchline": "Auto-fires your PvP Limit Break at low-HP enemies.",
-  "Description": "Fires your job's PvP Limit Break when an enemy's HP drops below a configurable threshold (percent of max HP, or absolute value). Optionally auto-selects the lowest-HP hostile in range when no manual target is set. Defensive/support LBs (e.g. Phalanx, Primal Scream) are recognized and skipped. Commands: /pvpautolb, /pvpautolb config, /palb.",
-  "ApplicableVersion": "any",
-  "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/PvpAutoLb/Images/IconDalamud.png",
-  "RepoUrl": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB",
-  "Tags": [
-    "pvp",
-    "limit break",
-    "combat",
-    "automation"
-  ]
+    "Author": "XeldarAlz",
+    "Name": "PVP Auto LB",
+    "Punchline": "Auto-fires your PvP Limit Break at low-HP enemies.",
+    "Description": "Fires your job's PvP Limit Break when an enemy's HP drops below a configurable threshold.",
+    "ApplicableVersion": "any",
+    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/PvpAutoLb/Images/IconDalamud.png",
+    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB",
+    "Tags": [
+        "pvp",
+        "limit break",
+        "combat",
+        "automation"
+    ]
 }
