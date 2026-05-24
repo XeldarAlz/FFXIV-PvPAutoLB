@@ -11,10 +11,10 @@ namespace PvpAutoLb.Windows;
 
 public sealed class AboutWindow : Window, IDisposable
 {
-    private const string RepoUrl = "https://github.com/XeldarAlz/FFXIV-PvPAutoLB";
-    private const string IssuesUrl = "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/issues";
-    private const string DiscussionsUrl = "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/discussions";
-    private const string SecurityUrl = "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/security/advisories/new";
+    private const string RepoUrl = "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak";
+    private const string IssuesUrl = "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/issues";
+    private const string DiscussionsUrl = "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions";
+    private const string SecurityUrl = "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new";
     private const string Author = "XeldarAlz";
     private const string License = "AGPL-3.0-or-later";
 

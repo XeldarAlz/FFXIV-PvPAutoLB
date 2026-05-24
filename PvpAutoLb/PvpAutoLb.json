@@ -4,8 +4,8 @@
     "Punchline": "Auto-fires your PvP Limit Break at low-HP enemies.",
     "Description": "Fires your job's PvP Limit Break when an enemy's HP drops below a configurable threshold.",
     "ApplicableVersion": "any",
-    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/PvpAutoLb/Images/IconDalamud.png",
-    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB",
+    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/master/PvpAutoLb/Images/IconDalamud.png",
+    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak",
     "Tags": [
         "pvp",
         "limit break",
