@@ -7,7 +7,7 @@
     "TestingAssemblyVersion": "1.0.5.0",
     "Description": "Fires your job's PvP Limit Break when an enemy's HP drops below a configurable threshold.",
     "Punchline": "Auto-fires your PvP Limit Break at low-HP enemies.",
-    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB",
+    "RepoUrl": "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak",
     "ApplicableVersion": "any",
     "Tags": [
       "pvp",
@@ -19,10 +19,10 @@
       "pvp"
     ],
     "DalamudApiLevel": 15,
-    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-PvPAutoLB/master/PvpAutoLb/Images/IconDalamud.png",
-    "DownloadLinkInstall": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/releases/latest/download/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/releases/latest/download/latest.zip",
-    "DownloadLinkTesting": "https://github.com/XeldarAlz/FFXIV-PvPAutoLB/releases/latest/download/latest.zip",
+    "IconUrl": "https://raw.githubusercontent.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/master/PvpAutoLb/Images/IconDalamud.png",
+    "DownloadLinkInstall": "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/releases/latest/download/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/releases/latest/download/latest.zip",
+    "DownloadLinkTesting": "https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/releases/latest/download/latest.zip",
     "IsTestingExclusive": false,
     "AcceptsFeedback": true,
     "DownloadCount": 113,
