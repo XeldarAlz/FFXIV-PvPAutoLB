@@ -143,54 +143,18 @@ jobs:
           Write-Error 'Failed to push repo.json bump after 5 attempts.'
           exit 1
 
-      # Mirror this plugin's entry into the multi-plugin hub repo so users
-      # only need to add one Dalamud URL to get all of @XeldarAlz's plugins.
-      # The hub repo holds a JSON array; we upsert (update or append) the
-      # entry keyed by InternalName.
-      - name: Mirror entry into DalamudPlugins hub
+      # Ping the multi-plugin hub repo so it regenerates repo.json immediately
+      # instead of waiting for its daily cron. The hub workflow re-reads each
+      # plugin's repo.json and refreshes DownloadCount from the GitHub API.
+      - name: Trigger hub repo regeneration
         if: ${{ env.HUB_REPO_PAT != '' }}
         env:
           HUB_REPO_PAT: ${{ secrets.HUB_REPO_PAT }}
-        shell: pwsh
+        shell: bash
         run: |
-          $pat = $env:HUB_REPO_PAT
-          git clone --depth 1 "https://x-access-token:$pat@github.com/XeldarAlz/DalamudPlugins.git" hub
-          Push-Location hub
-          $localEntry = (Get-Content -Raw -Path '../repo.json' | ConvertFrom-Json)[0]
-          $hub = Get-Content -Raw -Path 'repo.json' | ConvertFrom-Json
-          $hub = @($hub)
-          $existing = $hub | Where-Object { $_.InternalName -eq $localEntry.InternalName } | Select-Object -First 1
-          if ($existing) {
-            $idx = [Array]::IndexOf($hub, $existing)
-            $hub[$idx] = $localEntry
-          } else {
-            $hub = $hub + $localEntry
-          }
-          ConvertTo-Json -InputObject $hub -Depth 10 -AsArray | Set-Content -Path 'repo.json' -Encoding utf8
-
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add repo.json
-          if (-not (git status --porcelain)) {
-            Write-Host 'Hub repo.json already up to date.'
-            Pop-Location
-            exit 0
-          }
-          git commit -m "Bump $($localEntry.InternalName) to $($localEntry.AssemblyVersion)"
-          for ($i = 1; $i -le 5; $i++) {
-            git fetch origin main
-            git rebase -X theirs origin/main
-            if ($LASTEXITCODE -ne 0) {
-              git rebase --abort 2>$null
-              Write-Host "Hub rebase failed (attempt $i); retrying..."
-              Start-Sleep -Seconds 2
-              continue
-            }
-            git push origin HEAD:main
-            if ($LASTEXITCODE -eq 0) { Pop-Location; exit 0 }
-            Write-Host "Hub push rejected (attempt $i); retrying after rebase..."
-            Start-Sleep -Seconds 2
-          }
-          Pop-Location
-          Write-Error 'Failed to push hub update after 5 attempts.'
-          exit 1
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer $HUB_REPO_PAT" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/XeldarAlz/DalamudPlugins/dispatches \
+            -d '{"event_type":"plugin-released","client_payload":{"plugin":"${{ github.event.repository.name }}","version":"${{ steps.tag.outputs.version }}"}}'
