@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Questions & discussion
-    url: https://github.com/XeldarAlz/FFXIV-PvPAutoLB/discussions
+    url: https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions
     about: Ask a question, share a setup, or kick around an idea before filing an issue.
   - name: Security disclosure
-    url: https://github.com/XeldarAlz/FFXIV-PvPAutoLB/security/advisories/new
+    url: https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new
     about: Report a security issue privately.

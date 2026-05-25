@@ -2,11 +2,16 @@ name: Bug report
 description: Something's broken or behaving unexpectedly.
 title: "[Bug] "
 labels: ["bug"]
+assignees: ["XeldarAlz"]
 body:
   - type: markdown
     attributes:
       value: |
         Thanks for taking the time to file a bug. PVP Auto LB is PvP-only — please make sure your report is from a PvP context.
+
+        If you're not sure whether it's a bug or expected behavior, prefer [Help & troubleshooting discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=help-troubleshooting) — triage is faster there.
+
+        For security issues, please use [private vulnerability reporting](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new) instead.
 
   - type: textarea
     id: what-happened
@@ -25,26 +30,81 @@ body:
       placeholder: |
         1. Queue Crystalline Conflict on Ninja
         2. Threshold mode = percent, value = 30
-        3. Auto-target on
+        3. Auto-target on, scan radius 25y
         4. ...
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
     id: plugin-version
     attributes:
       label: Plugin version
-      description: Commit SHA or release tag you're running.
-      placeholder: "6d09e91 or v0.1.0"
+      description: Shown in `/xlplugins` next to "PVP Auto LB", and in the status window's About panel.
+      options:
+        - v1.0.5.0
+        - v1.0.2.0
+        - v1.0.1.0
+        - v1.0.0.0
+        - Older / not sure
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
+    id: game-version
+    attributes:
+      label: Game version
+      description: Patch you were on when it happened. Helps me match the report to a binary.
+      options:
+        - "7.55"
+        - "7.5"
+        - "7.45"
+        - "7.4"
+        - Older
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
     id: job
     attributes:
       label: Job
-      description: The PvP job you were playing.
-      placeholder: "Ninja"
+      description: The PvP job you were playing when the bug occurred.
+      options:
+        - Paladin
+        - Warrior
+        - Dark Knight
+        - Gunbreaker
+        - White Mage
+        - Scholar
+        - Astrologian
+        - Sage
+        - Monk
+        - Dragoon
+        - Ninja
+        - Samurai
+        - Reaper
+        - Viper
+        - Bard
+        - Machinist
+        - Dancer
+        - Black Mage
+        - Summoner
+        - Red Mage
+        - Pictomancer
+    validations:
+      required: true
+
+  - type: dropdown
+    id: duty
+    attributes:
+      label: Duty type
+      description: Which PvP mode were you in?
+      options:
+        - Crystalline Conflict
+        - Frontline
+        - Rival Wings
+        - Custom Match
+        - Other PvP
     validations:
       required: true
 
@@ -52,18 +112,34 @@ body:
     id: settings
     attributes:
       label: Relevant settings
-      description: Threshold mode + value, auto-target on/off, auto-range, anything non-default.
+      description: Threshold mode + value, per-job override, auto-target on/off, scan radius, blocklist entries, anything non-default.
+      placeholder: |
+        - Threshold: 30% (per-job override active for Ninja)
+        - Auto-target: on, 25y
+        - Skip doomed targets: on
+        - Blocklist: 2 entries
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Attachments
+      description: |
+        **If you can provide any of these, it turns guesswork into a fix.**
+
+        - **Dalamud log** — open `/xllog`, click *Open log folder* (bottom-right), attach `dalamud.log`. Filter by `[PvpAutoLb]` to trim it.
+        - **Screenshots / short clip** of the status window at the moment of the bug (readiness state, target, HP bar) — the readiness pill (`READY` / `FIRING` / `PAUSED` / `OUT OF RANGE` / `GAUGE LOW` / `DEFENSIVE`) usually tells the whole story.
+        - **Other plugins active** that touch input or PvP (rotation helpers, target plugins, etc.)
 
   - type: textarea
     id: logs
     attributes:
-      label: Logs / error text
+      label: Inline log excerpt (optional)
       description: |
-        Relevant lines from `/xllog`. Filter by `[PvpAutoLb]` if you can.
+        Short snippets from `/xllog` filtered by `[PvpAutoLb]`. For full log files, use **Attachments** above.
       render: shell
 
   - type: textarea
     id: extra
     attributes:
       label: Anything else?
-      description: Screenshots, other plugins that might interact, etc.
+      description: Match state, target's class, hunches — anything that helps the bug land.

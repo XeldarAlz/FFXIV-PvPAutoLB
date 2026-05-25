@@ -16,7 +16,7 @@ body:
     id: idea
     attributes:
       label: What did you have in mind?
-      description: Rough sketch is fine. Bullet points or prose.
+      description: Rough sketch is fine. Bullet points, mockups, or just prose.
     validations:
       required: true
 
