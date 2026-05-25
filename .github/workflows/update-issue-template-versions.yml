@@ -1,0 +1,146 @@
+# When a release is published, refresh the "Plugin version" dropdown options in
+# every .github/ISSUE_TEMPLATE/*.yml: prepend the new version (with the leading
+# `v` stripped), dedupe, keep the most recent 5 versions, and preserve the
+# "Older / not sure" sentinel at the bottom. Can also be dispatched manually
+# (defaults to the latest GitHub release tag) to backfill or recover.
+
+name: Update Issue Template Versions
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to inject (with or without `v` prefix). Leave blank to use the latest release tag.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve target version
+        id: resolve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [ -n "$RELEASE_TAG" ]; then
+            tag="$RELEASE_TAG"
+          elif [ -n "$INPUT_VERSION" ]; then
+            tag="$INPUT_VERSION"
+          else
+            tag=$(gh api "repos/${{ github.repository }}/releases/latest" --jq .tag_name)
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Using version: $tag"
+
+      - name: Rewrite Plugin version dropdowns
+        env:
+          VERSION: ${{ steps.resolve.outputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path
+
+          MAX_VERSIONS = 5
+          SENTINEL = "Older / not sure"
+
+          version = re.sub(r"^v", "", os.environ["VERSION"].strip())
+          if not version:
+              raise SystemExit("VERSION env is empty")
+
+          template_dir = Path(".github/ISSUE_TEMPLATE")
+          if not template_dir.is_dir():
+              raise SystemExit("No .github/ISSUE_TEMPLATE directory")
+
+          def rewrite(text):
+              lines = text.splitlines()
+              out = []
+              i = 0
+              changed = False
+              while i < len(lines):
+                  out.append(lines[i])
+                  if re.match(r"^\s*id:\s*plugin-version\s*$", lines[i]):
+                      j = i + 1
+                      options_idx = None
+                      while j < len(lines):
+                          if re.match(r"^\s*-\s+type\s*:", lines[j]):
+                              break
+                          if re.match(r"^\s*options\s*:\s*$", lines[j]):
+                              options_idx = j
+                              break
+                          j += 1
+                      if options_idx is None:
+                          i += 1
+                          continue
+                      for k in range(i + 1, options_idx + 1):
+                          out.append(lines[k])
+                      opt_indent = len(lines[options_idx]) - len(lines[options_idx].lstrip(" "))
+                      item_re = re.compile(r"^( {%d,})-\s+(.*\S)\s*$" % (opt_indent + 1))
+                      current = []
+                      item_indent = None
+                      k = options_idx + 1
+                      while k < len(lines):
+                          m = item_re.match(lines[k])
+                          if not m:
+                              break
+                          if item_indent is None:
+                              item_indent = m.group(1)
+                          val = m.group(2).strip()
+                          if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+                              val = val[1:-1]
+                          current.append(val)
+                          k += 1
+                      had_sentinel = SENTINEL in current
+                      versions = [re.sub(r"^v", "", v) for v in current if v != SENTINEL]
+                      new_list = [version] + [v for v in versions if v != version]
+                      new_list = new_list[:MAX_VERSIONS]
+                      final = new_list + ([SENTINEL] if had_sentinel else [])
+                      indent = item_indent or (" " * (opt_indent + 2))
+                      for v in final:
+                          out.append(f"{indent}- {v}")
+                      if final != current:
+                          changed = True
+                      i = k
+                      continue
+                  i += 1
+              return "\n".join(out) + "\n", changed
+
+          touched = False
+          for yml in sorted(template_dir.glob("*.yml")):
+              text = yml.read_text(encoding="utf-8")
+              new_text, changed = rewrite(text)
+              if changed and new_text != text:
+                  yml.write_text(new_text, encoding="utf-8", newline="\n")
+                  print(f"Updated {yml}")
+                  touched = True
+              else:
+                  print(f"No change in {yml}")
+          if not touched:
+              print("All templates already up to date.")
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .github/ISSUE_TEMPLATE
+          if ! git diff --cached --quiet; then
+            git commit -m "Update issue template versions for ${{ steps.resolve.outputs.tag }}"
+            git push origin HEAD:${{ github.event.repository.default_branch }}
+          else
+            echo "No template changes to commit."
+          fi
