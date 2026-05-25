@@ -13,7 +13,7 @@ Be decent. Assume good faith. Disagree about code, not people.
 
 ## Enforcement
 
-If someone is making this project a worse place to participate in, let me know: open a private security advisory (https://github.com/XeldarAlz/FFXIV-PvPAutoLB/security/advisories/new) or email the address on my GitHub profile. I'll look into it.
+If someone is making this project a worse place to participate in, let me know: open a private security advisory (https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new) or email the address on my GitHub profile. I'll look into it.
 
 Consequences range from a private word, to removing comments, to blocking the account from the repo. Depends on what happened and whether it keeps happening.
 

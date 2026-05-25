@@ -8,7 +8,7 @@ Only the latest `master` build is supported. If you're on an older commit or a s
 
 Please report security issues privately via GitHub's private vulnerability reporting:
 
-https://github.com/XeldarAlz/FFXIV-PvPAutoLB/security/advisories/new
+https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new
 
 Please don't open a public issue or Discussion for anything that could let someone else exploit users of the plugin before a fix is out.
 
