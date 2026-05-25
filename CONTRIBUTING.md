@@ -5,8 +5,8 @@ Thanks for taking an interest. This is a small solo project, but PRs are welcome
 ## Quick start
 
 ```bash
-git clone --recurse-submodules https://github.com/XeldarAlz/FFXIV-PvPAutoLB.git
-cd FFXIV-PvPAutoLB
+git clone --recurse-submodules https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak.git
+cd FFXIV-AutoPVPLimitBreak
 dotnet build PvpAutoLb.sln -c Release
 ```
 
