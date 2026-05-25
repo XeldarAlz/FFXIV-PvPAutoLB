@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <em>Auto-fires your PvP Limit Break at low-HP enemies. Built on Dalamud.</em>
+  <em>Your PvP Limit Break, fired for you. Built on Dalamud.</em>
 </p>
 
 ---

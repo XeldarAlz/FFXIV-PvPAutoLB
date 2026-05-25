@@ -13,9 +13,9 @@
     <Version>1.0.5.1</Version>
     <Authors>XeldarAlz</Authors>
     <Copyright>Copyright (c) XeldarAlz</Copyright>
-    <PackageProjectUrl>https://github.com/XeldarAlz/FFXIV-PvPAutoLB</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/XeldarAlz/FFXIV-PvPAutoLB</RepositoryUrl>
+    <RepositoryUrl>https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
