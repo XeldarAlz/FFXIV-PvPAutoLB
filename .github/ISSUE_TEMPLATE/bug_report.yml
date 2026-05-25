@@ -7,9 +7,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to file a bug. PVP Auto LB is PvP-only — please make sure your report is from a PvP context.
+        Thanks for taking the time to file a bug. PVP Auto LB is PvP-only; please make sure your report is from a PvP context.
 
-        If you're not sure whether it's a bug or expected behavior, prefer [Help & troubleshooting discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=help-troubleshooting) — triage is faster there.
+        If you're not sure whether it's a bug or expected behavior, prefer [Help & troubleshooting discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=help-troubleshooting); triage is faster there.
 
         For security issues, please use [private vulnerability reporting](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new) instead.
 
@@ -46,21 +46,6 @@ body:
         - v1.0.1.0
         - v1.0.0.0
         - Older / not sure
-    validations:
-      required: true
-
-  - type: dropdown
-    id: game-version
-    attributes:
-      label: Game version
-      description: Patch you were on when it happened. Helps me match the report to a binary.
-      options:
-        - "7.55"
-        - "7.5"
-        - "7.45"
-        - "7.4"
-        - Older
-        - Not sure
     validations:
       required: true
 
@@ -126,8 +111,8 @@ body:
       description: |
         **If you can provide any of these, it turns guesswork into a fix.**
 
-        - **Dalamud log** — open `/xllog`, click *Open log folder* (bottom-right), attach `dalamud.log`. Filter by `[PvpAutoLb]` to trim it.
-        - **Screenshots / short clip** of the status window at the moment of the bug (readiness state, target, HP bar) — the readiness pill (`READY` / `FIRING` / `PAUSED` / `OUT OF RANGE` / `GAUGE LOW` / `DEFENSIVE`) usually tells the whole story.
+        - **Dalamud log**: open `/xllog`, click *Open log folder* (bottom-right), attach `dalamud.log`. Filter by `[PvpAutoLb]` to trim it.
+        - **Screenshots / short clip** of the status window at the moment of the bug (readiness state, target, HP bar). The readiness pill (`READY` / `FIRING` / `PAUSED` / `OUT OF RANGE` / `GAUGE LOW` / `DEFENSIVE`) usually tells the whole story.
         - **Other plugins active** that touch input or PvP (rotation helpers, target plugins, etc.)
 
   - type: textarea
@@ -142,4 +127,4 @@ body:
     id: extra
     attributes:
       label: Anything else?
-      description: Match state, target's class, hunches — anything that helps the bug land.
+      description: Match state, target's class, hunches, anything that helps the bug land.

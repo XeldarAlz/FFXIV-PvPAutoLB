@@ -1,0 +1,95 @@
+name: Compatibility report
+description: Confirm whether a job's PvP Limit Break works (or doesn't) in live matches.
+title: "[Compat] "
+labels: ["compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this to grow the [job compatibility matrix](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak#job-compatibility). PvP LBs are resolved from game data so they all auto-wire, but a job is only marked ✅ confirmed once someone has played it in a live match.
+
+        Defensive/support LBs (🛡 in the table) are out of scope and not auto-fired; no need to test those.
+
+        If something didn't work, prefer the [bug report](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/issues/new?template=bug_report.yml) template; it has the fields to debug it.
+
+  - type: dropdown
+    id: job
+    attributes:
+      label: Job tested
+      options:
+        - Paladin
+        - Warrior
+        - Dark Knight
+        - Gunbreaker
+        - White Mage
+        - Scholar
+        - Astrologian
+        - Sage
+        - Monk
+        - Dragoon
+        - Ninja
+        - Samurai
+        - Reaper
+        - Viper
+        - Bard
+        - Machinist
+        - Dancer
+        - Black Mage
+        - Summoner
+        - Red Mage
+        - Pictomancer
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      description: Did the LB auto-fire correctly when an enemy dropped below the threshold?
+      options:
+        - "Worked, fired cleanly"
+        - "Partially worked, fired but with quirks (describe below)"
+        - "Didn't work, please file a bug report instead"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: duty
+    attributes:
+      label: Duty type
+      description: Where did you test it?
+      options:
+        - Crystalline Conflict
+        - Frontline
+        - Rival Wings
+        - Custom Match
+        - Other PvP
+    validations:
+      required: true
+
+  - type: dropdown
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: Shown in `/xlplugins` next to "PVP Auto LB".
+      options:
+        - v1.0.5.0
+        - v1.0.2.0
+        - v1.0.1.0
+        - v1.0.0.0
+        - Older / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything specific about how it fired: ground-targeted, self-buff chain, range quirks, follow-up actions? The README will quote these in the matrix's Notes column.
+      placeholder: "Fired at expected range; chained into the follow-up cleanly. No misfires across ~6 matches."
+
+  - type: textarea
+    id: clip
+    attributes:
+      label: Clip / screenshot (optional)
+      description: A short clip of the LB firing on a low-HP enemy is the strongest verification you can attach.
