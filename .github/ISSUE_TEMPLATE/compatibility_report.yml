@@ -73,6 +73,7 @@ body:
       label: Plugin version
       description: Shown in `/xlplugins` next to "PVP Auto LB".
       options:
+        - v1.0.5.1
         - v1.0.5.0
         - v1.0.2.0
         - v1.0.1.0
