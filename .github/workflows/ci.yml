@@ -90,7 +90,7 @@ jobs:
 
       - name: Upload plugin artifact
         if: github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PvpAutoLb-plugin
           path: PvpAutoLb/bin/x64/Release/PvpAutoLb/latest.zip
