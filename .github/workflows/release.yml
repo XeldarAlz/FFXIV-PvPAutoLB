@@ -20,6 +20,10 @@ permissions:
 jobs:
   release:
     runs-on: windows-latest
+    # Job-level so the hub-ping step's `if` can see it — `secrets` can't be used
+    # directly in an `if:` condition, but `env` mapped from a secret can.
+    env:
+      HUB_REPO_PAT: ${{ secrets.HUB_REPO_PAT }}
 
     steps:
       - name: Resolve target tag
@@ -148,8 +152,6 @@ jobs:
       # plugin's repo.json and refreshes DownloadCount from the GitHub API.
       - name: Trigger hub repo regeneration
         if: ${{ env.HUB_REPO_PAT != '' }}
-        env:
-          HUB_REPO_PAT: ${{ secrets.HUB_REPO_PAT }}
         shell: bash
         run: |
           curl -fsSL -X POST \
