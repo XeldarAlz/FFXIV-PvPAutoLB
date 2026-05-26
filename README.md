@@ -91,6 +91,12 @@ Limit Breaks are resolved from game data, so every job is wired up automatically
 | Viper | ✅ | | Red Mage | ✅ Southern Cross |
 |  |  | | Pictomancer | 🛡 Advent of Chocobastion |
 
+## More from me
+
+If you liked this plugin, take a look at my other Dalamud work. You might find something else there for you.
+
+→ [XeldarAlz Dalamud Plugins](https://github.com/XeldarAlz/DalamudPlugins)
+
 ## License
 
 AGPL-3.0-or-later. See [LICENSE.md](LICENSE.md).
