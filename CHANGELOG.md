@@ -2,6 +2,13 @@
 
 All notable changes to Auto PVP LB are documented here.
 
+## v1.0.5.2
+
+Display-name change only. No behavior changes.
+
+### Changed
+- **Renamed the plugin's display name from "PVP Auto LB" to "Auto PVP LB"** in the Dalamud installer listing, the three in-game window titles, and command help. The `InternalName` (`PvpAutoLb`), slash commands (`/pvpautolb`, `/palb`), and window ImGui IDs are unchanged, so saved configs and window layouts carry over.
+
 ## v1.0.5.0
 
 Behavior fix: the LB now wins the action-queue race against Rotation Solver and other plugins that submit actions every tick.
