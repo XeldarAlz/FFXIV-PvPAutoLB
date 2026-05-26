@@ -31,7 +31,7 @@ public sealed class AboutWindow : Window, IDisposable
 
     private static readonly Dictionary<string, float> linkHoverPulse = new();
 
-    public AboutWindow() : base("PVP Auto LB: About###PvpAutoLbAbout")
+    public AboutWindow() : base("Auto PVP LB: About###PvpAutoLbAbout")
     {
         Flags = ImGuiWindowFlags.NoCollapse;
         Size = new Vector2(560, 460);

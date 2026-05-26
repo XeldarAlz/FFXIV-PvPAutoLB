@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="PvpAutoLb/Images/Icon.png" width="180" alt="PVP Auto LB icon" />
+  <img src="PvpAutoLb/Images/Icon.png" width="180" alt="Auto PVP LB icon" />
 </p>
 
-<h1 align="center">PVP Auto LB</h1>
+<h1 align="center">Auto PVP LB</h1>
 
 <p align="center">
   <a href="https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/XeldarAlz/FFXIV-AutoPVPLimitBreak?style=flat-square&color=blue"></a>
@@ -18,7 +18,7 @@
 ---
 
 <p align="center">
-  <img src="PvpAutoLb/Images/demo.gif" alt="PVP Auto LB demo" />
+  <img src="PvpAutoLb/Images/demo.gif" alt="Auto PVP LB demo" />
 </p>
 
 ## What it does
@@ -47,7 +47,7 @@ In-game: `/xlsettings` → **Experimental** → paste into **Custom Plugin Repos
 https://raw.githubusercontent.com/XeldarAlz/DalamudPlugins/main/repo.json
 ```
 
-Tick **Enabled**, click **+**, then **Save and Close**. Open `/xlplugins` → **All Plugins**, search for **PVP Auto LB**, and install.
+Tick **Enabled**, click **+**, then **Save and Close**. Open `/xlplugins` → **All Plugins**, search for **Auto PVP LB**, and install.
 
 ## Commands
 

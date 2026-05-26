@@ -20,6 +20,6 @@ What counts:
 
 What doesn't:
 
-- The fact that PVP Auto LB casts an action for you in PvP. That's against Square Enix's Terms of Service and is the whole feature; turning it on is the user's choice.
+- The fact that Auto PVP LB casts an action for you in PvP. That's against Square Enix's Terms of Service and is the whole feature; turning it on is the user's choice.
 
 I'll aim to acknowledge reports within a few days and to ship a fix or workaround as soon as I've verified the issue.

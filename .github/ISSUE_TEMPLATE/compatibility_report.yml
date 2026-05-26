@@ -71,7 +71,7 @@ body:
     id: plugin-version
     attributes:
       label: Plugin version
-      description: Shown in `/xlplugins` next to "PVP Auto LB".
+      description: Shown in `/xlplugins` next to "Auto PVP LB".
       options:
         - 1.0.5.1
         - 1.0.5.0

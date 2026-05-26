@@ -26,7 +26,7 @@ Keep logic small and direct. This plugin has one job.
 ## Before you open a PR
 
 1. `dotnet build -c Release` cleanly.
-2. Test in-game on at least one PvP job, in an actual Crystalline Conflict match. PVP Auto LB is PvP-only — nothing else counts as "tested."
+2. Test in-game on at least one PvP job, in an actual Crystalline Conflict match. Auto PVP LB is PvP-only — nothing else counts as "tested."
 3. Keep the diff focused. One concern per PR.
 4. Match the existing style. No heavy abstractions "for later."
 5. If your change affects what a user sees or types (commands, window layout, settings), update the README.

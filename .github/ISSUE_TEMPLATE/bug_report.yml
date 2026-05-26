@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to file a bug. PVP Auto LB is PvP-only; please make sure your report is from a PvP context.
+        Thanks for taking the time to file a bug. Auto PVP LB is PvP-only; please make sure your report is from a PvP context.
 
         If you're not sure whether it's a bug or expected behavior, prefer [Q&A discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=q-a); triage is faster there.
 
@@ -39,7 +39,7 @@ body:
     id: plugin-version
     attributes:
       label: Plugin version
-      description: Shown in `/xlplugins` next to "PVP Auto LB", and in the status window's About panel.
+      description: Shown in `/xlplugins` next to "Auto PVP LB", and in the status window's About panel.
       options:
         - 1.0.5.1
         - 1.0.5.0

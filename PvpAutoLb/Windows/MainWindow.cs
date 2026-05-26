@@ -14,7 +14,7 @@ public sealed class MainWindow : Window, IDisposable
 {
     private readonly Plugin plugin;
 
-    public MainWindow(Plugin plugin) : base("PVP Auto LB###PvpAutoLbMain")
+    public MainWindow(Plugin plugin) : base("Auto PVP LB###PvpAutoLbMain")
     {
         SizeConstraints = new WindowSizeConstraints
         {

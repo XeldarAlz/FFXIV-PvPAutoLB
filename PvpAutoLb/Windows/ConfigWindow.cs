@@ -12,7 +12,7 @@ public sealed class ConfigWindow : Window, IDisposable
 {
     private readonly Configuration cfg;
 
-    public ConfigWindow(Plugin plugin) : base("PVP Auto LB — Settings###PvpAutoLbConfig")
+    public ConfigWindow(Plugin plugin) : base("Auto PVP LB — Settings###PvpAutoLbConfig")
     {
         Flags = ImGuiWindowFlags.NoCollapse;
         Size = new Vector2(480, 520);

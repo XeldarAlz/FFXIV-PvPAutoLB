@@ -11,7 +11,7 @@ Closes #
 ## How to test
 
 <!--
-Minimum steps a reviewer can run to verify the change. PVP Auto LB is PvP-only, so testing usually means queueing Crystalline Conflict on the affected job. For UI-only changes, describe what to click.
+Minimum steps a reviewer can run to verify the change. Auto PVP LB is PvP-only, so testing usually means queueing Crystalline Conflict on the affected job. For UI-only changes, describe what to click.
 -->
 
 ## Checklist

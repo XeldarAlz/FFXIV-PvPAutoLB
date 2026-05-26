@@ -47,7 +47,7 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.AddHandler(PrimaryCommand, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggle the PVP Auto LB main window. Use /pvpautolb config to open settings."
+            HelpMessage = "Toggle the Auto PVP LB main window. Use /pvpautolb config to open settings."
         });
         CommandManager.AddHandler(AliasCommand, new CommandInfo(OnCommand)
         {

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to PVP Auto LB are documented here.
+All notable changes to Auto PVP LB are documented here.
 
 ## v1.0.5.0
 

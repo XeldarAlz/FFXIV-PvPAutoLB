@@ -1,6 +1,6 @@
 {
     "Author": "XeldarAlz",
-    "Name": "PVP Auto LB",
+    "Name": "Auto PVP LB",
     "InternalName": "PvpAutoLb",
     "Punchline": "Your PvP Limit Break, fired for you.",
     "Description": "Fires your PvP Limit Break for you when an enemy's HP drops below a configurable threshold.",
