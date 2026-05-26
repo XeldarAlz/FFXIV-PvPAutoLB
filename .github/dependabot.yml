@@ -10,3 +10,24 @@ updates:
       - dependencies
       - ci
     open-pull-requests-limit: 5
+
+  - package-ecosystem: nuget
+    directory: /PvpAutoLb
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: deps
+    labels:
+      - dependencies
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: deps
+    labels:
+      - dependencies
+      - submodule
+    open-pull-requests-limit: 5
