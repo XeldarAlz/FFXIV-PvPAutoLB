@@ -9,7 +9,7 @@ body:
       value: |
         Thanks for taking the time to file a bug. PVP Auto LB is PvP-only; please make sure your report is from a PvP context.
 
-        If you're not sure whether it's a bug or expected behavior, prefer [Help & troubleshooting discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=help-troubleshooting); triage is faster there.
+        If you're not sure whether it's a bug or expected behavior, prefer [Q&A discussions](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/discussions/new?category=q-a); triage is faster there.
 
         For security issues, please use [private vulnerability reporting](https://github.com/XeldarAlz/FFXIV-AutoPVPLimitBreak/security/advisories/new) instead.
 
